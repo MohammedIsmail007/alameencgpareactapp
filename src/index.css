@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 0 20px;
+} */
+
+tr,
+th,
+td {
+  border: 1px solid #443381;
+  width: 75%;
+}
+
+@media only screen and (min-width: 1024px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px;
+  }
+}
+
+@media only screen and (max-width: 100px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px;
+  }
+}
+
+/* Common Styles */
+/* .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .table-auto {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+  }
+  
+  .table-auto th, .table-auto td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+  
+  button {
+    padding: 10px 20px;
+    margin: 10px 0;
+  }
+  
+  /* Responsive Styles */
+/* @media (min-width: 768px) {
+    .flex-wrap {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  
+    .justify-center {
+      justify-content: center;
+    }
+  
+    .container {
+      padding: 20px;
+    }
+  
+    .p-2 {
+      padding: 20px;
+    }
+  
+    .m-2 {
+      margin: 20px;
+    }
+  
+    .p-3 {
+      padding: 30px;
+    }
+  
+    .m-3 {
+      margin: 30px;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .container {
+      padding: 10px;
+    }
+  
+    .p-2 {
+      padding: 10px;
+    }
+  
+    .m-2 {
+      margin: 10px;
+    }
+  
+    .p-3 {
+      padding: 15px;
+    }
+  
+    .m-3 {
+      margin: 15px;
+    }
+  
+    .w-72 {
+      width: 100%;
+    }
+  
+    .hidden {
+      display: none;
+    }
+  } */

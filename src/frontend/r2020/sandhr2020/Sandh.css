@@ -1,0 +1,38 @@
+.semcalc {
+  display: none;
+}
+.sme1calc {
+  visibility: visible;
+}
+
+.sme2calc {
+  visibility: visible;
+}
+
+.printaction {
+  display: none;
+}
+
+table {
+  border-collapse: separate;
+}
+th {
+  border: 0px;
+  padding: 2px;
+}
+td {
+  border: 0px;
+  padding: 2px;
+}
+tr:first-child td:first-child {
+  border-top-left-radius: 10px;
+}
+tr:first-child td:last-child {
+  border-top-right-radius: 10px;
+}
+tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}

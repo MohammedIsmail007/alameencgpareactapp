@@ -1,0 +1,225 @@
+
+app.post('/itsem3', (req, res) => {
+    const { regno } = req.body;
+    checkQuery = 'SELECT * FROM itsem3 WHERE regno = ?';
+    db.query(checkQuery, [regno], (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
+            const sql = "INSERT INTO itsem3 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const values = [req.body.regno,
+            req.body.ittotsum,
+            req.body.ittotcredit,
+            req.body.itprevcredit,
+            req.body.gpa3,
+            req.body.cgpa3];
+            db.query(sql, [values], (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send("Value inserted successfully");
+                }
+            });
+        }
+    })
+});
+
+app.get('/itsem3', (req, res) => {
+    const sql = "SELECT * FROM itsem3";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+
+    })
+})
+
+app.get('/itsem3/:regno', (req, res) => {
+    const regno = req.params.regno;
+    const sql = `
+        SELECT s.regno, s.name, s.dpt, itsem3.ittotsum, itsem3.ittotcredit, itsem3.itprevcredit, itsem3.itgpa, itsem3.itcgpa 
+        FROM students s
+        JOIN itsem3 ON s.regno = itsem3.regno
+        WHERE s.regno =?`;
+    db.query(sql, [regno], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(result[0]); // Return the first match (unique regno)
+        }
+    });
+});
+
+app.post('/itsem4', (req, res) => {
+    const { regno } = req.body;
+    const checkQuery = 'SELECT * FROM itsem4 WHERE regno = ?';
+    db.query(checkQuery, [regno], (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
+            const sql = "INSERT INTO itsem4 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const values = [req.body.regno,
+            req.body.ittotsum,
+            req.body.ittotcredit,
+            req.body.itprevcredit,
+            req.body.gpa4,
+            req.body.cgpa4];
+            db.query(sql, [values], (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send("Value inserted successfully");
+                }
+            });
+        }
+
+    });
+})
+
+app.get('/itsem4', (req, res) => {
+    const sql = "SELECT * FROM itsem4";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+
+    })
+})
+
+app.get('/itsem4/:regno', (req, res) => {
+    const regno = req.params.regno;
+    const sql = `
+        SELECT s.regno, s.name, s.dpt, itsem4.ittotsum, itsem4.ittotcredit, itsem4.itprevcredit, itsem4.itgpa, itsem4.itcgpa 
+        FROM students s
+        JOIN itsem4 ON s.regno = itsem4.regno
+        WHERE s.regno =?`;
+    db.query(sql, [regno], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(result[0]); // Return the first match (unique regno)
+        }
+    });
+});
+
+
+app.post('/itsem5', (req, res) => {
+    const { regno } = req.body;
+    const checkQuery = 'SELECT * FROM itsem5 WHERE regno = ?';
+    db.query(checkQuery, [regno], (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
+            const sql = "INSERT INTO itsem5 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const values = [req.body.regno,
+            req.body.ittotsum,
+            req.body.ittotcredit,
+            req.body.itprevcredit,
+            req.body.gpa5,
+            req.body.cgpa5];
+            db.query(sql, [values], (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send("Value inserted successfully");
+                }
+            });
+        }
+    });
+})
+
+app.get('/itsem5', (req, res) => {
+    const sql = "SELECT * FROM itsem5";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+
+    })
+})
+
+app.get('/itsem5/:regno', (req, res) => {
+    const regno = req.params.regno;
+    const sql = `
+        SELECT s.regno, s.name, s.dpt, itsem5.ittotsum, itsem5.ittotcredit, itsem5.itprevcredit, itsem5.itgpa, itsem5.itcgpa 
+        FROM students s
+        JOIN itsem5 ON s.regno = itsem5.regno
+        WHERE s.regno =?`;
+    db.query(sql, [regno], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(result[0]); // Return the first match (unique regno)
+        }
+    });
+});
+
+
+app.post('/itsem6', (req, res) => {
+    const { regno } = req.body;
+    const checkQuery = 'SELECT * FROM itsem6 WHERE regno = ?';
+    db.query(checkQuery, [regno], (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
+            const sql = "INSERT INTO itsem6 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const values = [req.body.regno,
+            req.body.ittotsum,
+            req.body.ittotcredit,
+            req.body.itprevcredit,
+            req.body.gpa6,
+            req.body.cgpa6];
+            db.query(sql, [values], (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send("Value inserted successfully");
+                }
+            });
+        }
+    });
+})
+
+app.get('/itsem6', (req, res) => {
+    const sql = "SELECT * FROM itsem6";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+
+    })
+})
+
+app.get('/itsem6/:regno', (req, res) => {
+    const regno = req.params.regno;
+    const sql = `
+        SELECT s.regno, s.name, s.dpt, itsem6.ittotsum, itsem6.ittotcredit, itsem6.itprevcredit, itsem6.itgpa, itsem6.itcgpa 
+        FROM students s
+        JOIN itsem6 ON s.regno = itsem6.regno
+        WHERE s.regno =?`;
+    db.query(sql, [regno], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(result[0]); // Return the first match (unique regno)
+        }
+    });
+});
+
+
+
+app.get('/students', (req, res) => {
+    const sql = "SELECT * FROM students";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+
+    })
+})

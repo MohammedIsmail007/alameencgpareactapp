@@ -1,0 +1,7 @@
+#alameenbg {
+  background-image: url("/src/assets/clgbg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  backdrop-filter: blur(8px);
+  background-size: cover;
+}
