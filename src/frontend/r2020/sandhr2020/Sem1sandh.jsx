@@ -199,15 +199,15 @@ const Sandhhome = () => {
           {" "}
           {/* CGPA RENDER AREA ------------------------------------------------------- */}
           <div className="container flex flex-wrap gap-2 m-5 p-5 flex-col  justify-center">
-            <div className="container">
+            <div className="container flex flex-wrap justify-center ">
               <h1 className="roboto-bold flex flex-wrap justify-center text-xl text-center">
                 CGPA FOR SEMESTER-II
               </h1>
               <div>
                 {/* TABLE STARTING--------------------------------------------------- */}
-                <div className="justify-center flex flex-wrap p-3 ">
+                <div className="justify-center flex flex-wrap p-3 gap-3  ">
                   {" "}
-                  <table className="bg-white text-center border-doubled  p-3  border shadow-2xl">
+                  <table className="table-bordered border-2 rounded-sm gap-5 bg-white text-center ">
                     <thead>
                       <tr>
                         <th>COURSE</th>
