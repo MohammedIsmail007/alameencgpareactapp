@@ -19,7 +19,6 @@ function App() {
           <Route path="/cser2020" element={<Cser2020home />}></Route>
           <Route path="/itr2020" element={<Itr2020home />}></Route>
           <Route path="/aidsr2020" element={<Aidsr2020home />}></Route>
-          <Route path="*" element={<Home />}></Route>
         </Routes>
       </BrowserRouter>
     </>
