@@ -198,7 +198,7 @@ const Csesem3r2020 = () => {
           {" "}
           {/* CGPA RENDER AREA ------------------------------------------------------- */}
           <div className=" flex flex-wrap gap-4 m-5 p-5 flex-col  justify-center">
-            <div className="container">
+            <div className="container flex flex-wrap justify-center ">
               <h1 className=" roboto-bold flex flex-wrap justify-center text-xl text-center">
                 CGPA FOR SEMESTER-III
               </h1>

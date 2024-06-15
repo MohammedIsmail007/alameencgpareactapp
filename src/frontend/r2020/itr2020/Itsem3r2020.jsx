@@ -194,7 +194,7 @@ const Itsem3r2020 = () => {
     <>
       <div className="container flex flex-wrap justify-center">
         {/* STARTING OF SEMESTER 2 TABLE CGPA CALCULATION */}
-        <div className="container ">
+        <div className="container flex flex-wrap justify-center ">
           {" "}
           {/* CGPA RENDER AREA ------------------------------------------------------- */}
           <div className="flex flex-wrap gap-4 m-5 p-5 flex-col  justify-center">
