@@ -195,7 +195,7 @@ const Sandhhome = () => {
     <>
       <div className="flex flex-wrap justify-center  ">
         {/* STARTING OF SEMESTER TABLE CGPA CALCULATION */}
-        <div className="container">
+        <div className="container flex flex-wrap justify-center ">
           {" "}
           {/* CGPA RENDER AREA ------------------------------------------------------- */}
           <div className="container flex flex-wrap gap-2 m-5 p-5 flex-col  justify-center">

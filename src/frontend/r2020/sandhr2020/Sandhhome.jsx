@@ -122,7 +122,7 @@ const Sandhhome = () => {
               <h1 className="roboto-bold flex flex-wrap justify-center text-xl text-center">
                 CGPA FOR SEMESTER-I
               </h1>
-              <div className="container">
+              <div className="container flex flex-wrap justify-center ">
                 {/* TABLE STARTING--------------------------------------------------- */}
                 <div className="justify-center flex flex-wrap p-3 container ">
                   {" "}
