@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon Server.js",
-    "host": "192.168.185.35",
-    "port": "3000" 
+   
   },
   "keywords": [],
   "author": "",
