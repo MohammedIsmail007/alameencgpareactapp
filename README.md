@@ -22,12 +22,12 @@ This project is a web application built using the MERN stack (MongoDB, Express.j
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/MohammedIsmail007/alameencgpareact-reactjs.git
+   git clone https://github.com/MohammedIsmail007/alameencgpareactapp.git
    ```
 
 2. **Install dependencies**
    ```bash
-   cd alameencgpareact-reactjs
+   cd alameencgpareactapp
    npm install
    ```
 
@@ -71,6 +71,10 @@ Please contact [Mohammed Ismail](mailto:mohammedismail9788@gmail.com) for any in
 
 ## **PREVIEW**
 
-https://github.com/MohammedIsmail007/alameencgpareact-reactjs/assets/153194494/66b4fc23-fce4-4a14-8d83-3bac4cebb6f5
+
+
+https://github.com/MohammedIsmail007/alameencgpareactapp/assets/153194494/82c4d7b0-29f8-4e98-a0b7-829174a63c7c
+
+
 
 
