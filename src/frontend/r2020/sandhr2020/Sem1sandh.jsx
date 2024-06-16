@@ -591,20 +591,19 @@ const Sandhhome = () => {
                         }`}
                       >
                         <h1>Select Your register number to calculate CGPA</h1>
-                        <select
-                          value={selectedRegno}
+                        <input
                           onChange={handleSelectChange}
-                          className=" rounded-md p-2 m-3 text-black"
-                        >
-                          <option value="" className="text-black">
-                            Select a registration number
+                          placeholder="Enter your register number"
+                          className=" rounded-md p-2 w-full  mt-2 text-black"
+                        />
+                        {/* <option value="" className="text-black">
+                          Select a registration number
+                        </option>
+                        {regnos.map((student) => (
+                          <option key={student.regno2} value={student.regno2}>
+                            {student.regno2}
                           </option>
-                          {regnos.map((student) => (
-                            <option key={student.regno} value={student.regno}>
-                              {student.regno}
-                            </option>
-                          ))}
-                        </select>
+                        ))} */}
 
                         {loading && <div>Loading...</div>}
                         {error && <div>Error: {error.message}</div>}

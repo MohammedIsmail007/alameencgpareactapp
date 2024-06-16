@@ -1,11 +1,11 @@
 
-app.post('/itsem3', (req, res) => {
+app.post('/civilsem3', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM itsem3 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM civilsem3 WHERE regno = ?';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem3 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem3 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
@@ -23,8 +23,8 @@ app.post('/itsem3', (req, res) => {
     })
 });
 
-app.get('/itsem3', (req, res) => {
-    const sql = "SELECT * FROM itsem3";
+app.get('/civilsem3', (req, res) => {
+    const sql = "SELECT * FROM civilsem3";
     db.query(sql, (err, result) => {
         if (err) {
             console.log(err);
@@ -35,12 +35,12 @@ app.get('/itsem3', (req, res) => {
     })
 })
 
-app.get('/itsem3/:regno', (req, res) => {
+app.get('/civilsem3/:regno', (req, res) => {
     const regno = req.params.regno;
     const sql = `
-        SELECT s.regno, s.name, s.dpt, itsem3.ittotsum, itsem3.ittotcredit, itsem3.itprevcredit, itsem3.itgpa, itsem3.itcgpa 
+        SELECT s.regno, s.name, s.dpt, civilsem3.ittotsum, civilsem3.ittotcredit, civilsem3.itprevcredit, civilsem3.itgpa, civilsem3.itcgpa 
         FROM students s
-        JOIN itsem3 ON s.regno = itsem3.regno
+        JOIN civilsem3 ON s.regno = civilsem3.regno
         WHERE s.regno =?`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
@@ -51,13 +51,13 @@ app.get('/itsem3/:regno', (req, res) => {
     });
 });
 
-app.post('/itsem4', (req, res) => {
+app.post('/civilsem4', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM itsem4 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM civilsem4 WHERE regno = ?';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem4 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem4 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
@@ -76,8 +76,8 @@ app.post('/itsem4', (req, res) => {
     });
 })
 
-app.get('/itsem4', (req, res) => {
-    const sql = "SELECT * FROM itsem4";
+app.get('/civilsem4', (req, res) => {
+    const sql = "SELECT * FROM civilsem4";
     db.query(sql, (err, result) => {
         if (err) {
             console.log(err);
@@ -88,12 +88,12 @@ app.get('/itsem4', (req, res) => {
     })
 })
 
-app.get('/itsem4/:regno', (req, res) => {
+app.get('/civilsem4/:regno', (req, res) => {
     const regno = req.params.regno;
     const sql = `
-        SELECT s.regno, s.name, s.dpt, itsem4.ittotsum, itsem4.ittotcredit, itsem4.itprevcredit, itsem4.itgpa, itsem4.itcgpa 
+        SELECT s.regno, s.name, s.dpt, civilsem4.ittotsum, civilsem4.ittotcredit, civilsem4.itprevcredit, civilsem4.itgpa, civilsem4.itcgpa 
         FROM students s
-        JOIN itsem4 ON s.regno = itsem4.regno
+        JOIN civilsem4 ON s.regno = civilsem4.regno
         WHERE s.regno =?`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
@@ -105,13 +105,13 @@ app.get('/itsem4/:regno', (req, res) => {
 });
 
 
-app.post('/itsem5', (req, res) => {
+app.post('/civilsem5', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM itsem5 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM civilsem5 WHERE regno = ?';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem5 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem5 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
@@ -129,8 +129,8 @@ app.post('/itsem5', (req, res) => {
     });
 })
 
-app.get('/itsem5', (req, res) => {
-    const sql = "SELECT * FROM itsem5";
+app.get('/civilsem5', (req, res) => {
+    const sql = "SELECT * FROM civilsem5";
     db.query(sql, (err, result) => {
         if (err) {
             console.log(err);
@@ -141,12 +141,12 @@ app.get('/itsem5', (req, res) => {
     })
 })
 
-app.get('/itsem5/:regno', (req, res) => {
+app.get('/civilsem5/:regno', (req, res) => {
     const regno = req.params.regno;
     const sql = `
-        SELECT s.regno, s.name, s.dpt, itsem5.ittotsum, itsem5.ittotcredit, itsem5.itprevcredit, itsem5.itgpa, itsem5.itcgpa 
+        SELECT s.regno, s.name, s.dpt, civilsem5.ittotsum, civilsem5.ittotcredit, civilsem5.itprevcredit, civilsem5.itgpa, civilsem5.itcgpa 
         FROM students s
-        JOIN itsem5 ON s.regno = itsem5.regno
+        JOIN civilsem5 ON s.regno = civilsem5.regno
         WHERE s.regno =?`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
@@ -158,13 +158,13 @@ app.get('/itsem5/:regno', (req, res) => {
 });
 
 
-app.post('/itsem6', (req, res) => {
+app.post('/civilsem6', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM itsem6 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM civilsem6 WHERE regno = ?';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem6 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem6 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
@@ -182,8 +182,8 @@ app.post('/itsem6', (req, res) => {
     });
 })
 
-app.get('/itsem6', (req, res) => {
-    const sql = "SELECT * FROM itsem6";
+app.get('/civilsem6', (req, res) => {
+    const sql = "SELECT * FROM civilsem6";
     db.query(sql, (err, result) => {
         if (err) {
             console.log(err);
@@ -194,12 +194,117 @@ app.get('/itsem6', (req, res) => {
     })
 })
 
-app.get('/itsem6/:regno', (req, res) => {
+app.get('/civilsem6/:regno', (req, res) => {
     const regno = req.params.regno;
     const sql = `
-        SELECT s.regno, s.name, s.dpt, itsem6.ittotsum, itsem6.ittotcredit, itsem6.itprevcredit, itsem6.itgpa, itsem6.itcgpa 
+        SELECT s.regno, s.name, s.dpt, civilsem6.ittotsum, civilsem6.ittotcredit, civilsem6.itprevcredit, civilsem6.itgpa, civilsem6.itcgpa 
         FROM students s
-        JOIN itsem6 ON s.regno = itsem6.regno
+        JOIN civilsem6 ON s.regno = civilsem6.regno
+        WHERE s.regno =?`;
+    db.query(sql, [regno], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(result[0]); // Return the first match (unique regno)
+        }
+    });
+});
+
+app.post('/civilsem7', (req, res) => {
+    const { regno } = req.body;
+    checkQuery = 'SELECT * FROM civilsem7 WHERE regno = ?';
+    db.query(checkQuery, [regno], (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
+            const sql = "INSERT INTO civilsem7 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const values = [req.body.regno,
+            req.body.ittotsum,
+            req.body.ittotcredit,
+            req.body.itprevcredit,
+            req.body.gpa3,
+            req.body.cgpa3];
+            db.query(sql, [values], (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send("Value inserted successfully");
+                }
+            });
+        }
+    })
+});
+
+app.get('/civilsem7', (req, res) => {
+    const sql = "SELECT * FROM civilsem7";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+
+    })
+})
+
+app.get('/civilsem7/:regno', (req, res) => {
+    const regno = req.params.regno;
+    const sql = `
+        SELECT s.regno, s.name, s.dpt, civilsem7.ittotsum, civilsem7.ittotcredit, civilsem7.itprevcredit, civilsem7.itgpa, civilsem7.itcgpa 
+        FROM students s
+        JOIN civilsem7 ON s.regno = civilsem7.regno
+        WHERE s.regno =?`;
+    db.query(sql, [regno], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(result[0]); // Return the first match (unique regno)
+        }
+    });
+});
+
+app.post('/civilsem8', (req, res) => {
+    const { regno } = req.body;
+    const checkQuery = 'SELECT * FROM civilsem8 WHERE regno = ?';
+    db.query(checkQuery, [regno], (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
+            const sql = "INSERT INTO civilsem8 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const values = [req.body.regno,
+            req.body.ittotsum,
+            req.body.ittotcredit,
+            req.body.itprevcredit,
+            req.body.gpa4,
+            req.body.cgpa4];
+            db.query(sql, [values], (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send("Value inserted successfully");
+                }
+            });
+        }
+
+    });
+})
+
+app.get('/civilsem8', (req, res) => {
+    const sql = "SELECT * FROM civilsem8";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+
+    })
+})
+
+app.get('/civilsem8/:regno', (req, res) => {
+    const regno = req.params.regno;
+    const sql = `
+        SELECT s.regno, s.name, s.dpt, civilsem8.ittotsum, civilsem8.ittotcredit, civilsem8.itprevcredit, civilsem8.itgpa, civilsem8.itcgpa 
+        FROM students s
+        JOIN civilsem8 ON s.regno = civilsem8.regno
         WHERE s.regno =?`;
     db.query(sql, [regno], (err, result) => {
         if (err) {

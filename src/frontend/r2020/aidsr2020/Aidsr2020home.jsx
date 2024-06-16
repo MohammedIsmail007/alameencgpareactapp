@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Footer from "../../Footer";
 import Aidssem3r2020 from "./Aidssem3r2020";
+import Aidssem4r2020 from "./Aidssem4r2020";
 const Aidsr2020home = () => {
   const [sem3, setSem3] = useState(false);
   const [sem4, setSem4] = useState(false);
@@ -109,7 +110,7 @@ const Aidsr2020home = () => {
             <Aidssem3r2020 />
           </div>
           <div className={`${sem4 ? "sem1calc container" : "semcalc"} `}>
-            sem 4
+            <Aidssem4r2020 />
           </div>
           <div className={`${sem5 ? "sem1calc container " : "semcalc"} `}>
             sem 5

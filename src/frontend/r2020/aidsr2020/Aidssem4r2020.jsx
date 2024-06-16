@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Itsem5r2020 = () => {
+const Aidssem4r2020 = () => {
   const [regnos, setRegnos] = useState([]);
   const [selectedRegno, setSelectedRegno] = useState("");
   const [studentData, setStudentData] = useState(null);
@@ -15,7 +15,7 @@ const Itsem5r2020 = () => {
 
   const fetchRegnos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/itsem4"); // Update this endpoint as necessary
+      const response = await axios.get("http://localhost:5000/aidssem3"); // Update this endpoint as necessary
       setRegnos(response.data);
     } catch (error) {
       console.error("Error fetching registration numbers:", error);
@@ -26,7 +26,9 @@ const Itsem5r2020 = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:5000/itsem4/${regno}`);
+      const response = await axios.get(
+        `http://localhost:5000/aidssem3/${regno}`
+      );
       setStudentData(response.data);
     } catch (error) {
       console.error("Error fetching student data:", error);
@@ -71,7 +73,7 @@ const Itsem5r2020 = () => {
   };
 
   const handleSubmitArrear = () => {
-    // //console.log("Selected Subjects:", subjects);
+    //console.log("Selected Subjects:", subjects);
 
     let totalCreditScore = 0;
     let totalGradePoints = 0;
@@ -86,82 +88,83 @@ const Itsem5r2020 = () => {
     setArreartotalcreditscore(totalCreditScore);
     setArreartotalgrades(totalGradePoints);
 
-    // //console.log("Total Credit Score:", totalCreditScore);
-    // //console.log("Total Grade (multiplied by credit score):", totalGradePoints);
+    //console.log("Total Credit Score:", totalCreditScore);
+    //console.log("Total Grade (multiplied by credit score):", totalGradePoints);
   };
 
   //arrear calculation ----------------------------------------------------------------
 
   const [printaction, setPrintAction] = useState(false);
-  var itvale5 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var itsem5 = [4, 4, 3, 3, 3, 4, 0];
-  var itsum5 = 0;
-  var itgpa5 = [];
-  var ittot5 = 0;
-  var mulitsum5 = 0;
+  var aidsvale4 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
+  var aidssem4 = [3, 3, 4, 3, 3, 3, 1.0, 1.5, 1.5, 0];
+  var aidssum4 = 0;
+  var aidsgpa4 = [];
+  var aidstot4 = 0;
+  var mulaidssum4 = 0;
 
-  function get5() {
-    var ses = document.getElementsByClassName("selectitsem5");
-    var creditregit4 = 0; // Initialize creditreg to 0
-    itsum5 = 0; // Ensure sum1 is reset
-    itgpa5 = []; // Ensure gpa1 is reset
+  function get4() {
+    var ses = document.getElementsByClassName("selectaidssem4");
+    var creditregaids4 = 0; // Initialize creditreg to 0
+    aidssum4 = 0; // Ensure sum1 is reset
+    aidsgpa4 = []; // Ensure gpa1 is reset
 
     for (var i = 0; i < ses.length; i++) {
       var val4 = ses[i].options[ses[i].selectedIndex].value;
-      itgpa5.push(itvale5[val4] * itsem5[i]);
-      itsum5 += itvale5[val4] * itsem5[i];
+      aidsgpa4.push(aidsvale4[val4] * aidssem4[i]);
+      aidssum4 += aidsvale4[val4] * aidssem4[i];
 
       // Update creditreg only if the selected option is not "other"
       if (val4 !== "other") {
-        creditregit4 += itsem5[i];
+        creditregaids4 += aidssem4[i];
       }
     }
 
     // Calculate the GPA
-    mulitsum5 = itsum5;
+    mulaidssum4 = aidssum4;
     //const prevcredit = parseFloat(studentData.prevcredit);
 
-    //////console.log(creditreg);
-    ittot5 = creditregit4 === 0 ? 0 : (mulitsum5 / creditregit4).toFixed(3);
+    ////console.log(creditreg);
+    aidstot4 =
+      creditregaids4 === 0 ? 0 : (mulaidssum4 / creditregaids4).toFixed(3);
 
     // Update the form fields
-    document.getElementById("totcreditregit5").value = creditregit4;
-    document.getElementById("totsumvalueit5").value = itsum5;
-    document.getElementById("itgpa5").value = ittot5;
+    document.getElementById("totcreditregaids4").value = creditregaids4;
+    document.getElementById("totsumvalueaids4").value = aidssum4;
+    document.getElementById("aidsgpa4").value = aidstot4;
   }
 
-  // ////console.log(studentData.totcredit);
-  function sem5cgpacalc() {
-    const prevcredit = document.getElementById("itprevcredit5").value;
-    const sem4credit =
-      parseFloat(studentData.ittotcredit) + parseFloat(prevcredit);
-    const sem4totsum = parseFloat(studentData.ittotsum);
-    const sem5totsum = document.getElementById("totsumvalueit5").value;
-    const sem5credit = document.getElementById("totcreditregit5").value;
+  // //console.log(studentData.totcredit);
+  function sem4cgpacalc() {
+    const prevcredit = document.getElementById("aidsprevcredit4").value;
+    const sem3credit =
+      parseFloat(studentData.aidstotcredit) + parseFloat(prevcredit);
+    const sem3totsum = parseFloat(studentData.aidstotsum);
+    const sem4totsum = document.getElementById("totsumvalueaids4").value;
+    const sem4credit = document.getElementById("totcreditregaids4").value;
 
     const totalsum =
+      parseFloat(sem3totsum) +
       parseFloat(sem4totsum) +
-      parseFloat(sem5totsum) +
       parseFloat(arreartotalgrades);
     const totalcredit =
+      parseFloat(sem3credit) +
       parseFloat(sem4credit) +
-      parseFloat(sem5credit) +
       parseFloat(arreartotalcreditscore);
-    const cgpasem5total = totalsum / totalcredit;
-    document.getElementById("totcitgpa5").value = cgpasem5total.toFixed(2);
-    ////console.log("total credit", totalcredit);
-    ////console.log(prevcredit);
-    ////console.log(cgpasem5total);
-    ////console.log(parseFloat(sem4credit) + parseFloat(sem4credit));
-    //console.log(sem4credit);
+    const cgpasem4total = totalsum / totalcredit;
+    document.getElementById("totcaidsgpa4").value = cgpasem4total.toFixed(2);
+    //console.log("total credit", totalcredit);
+    //console.log(prevcredit);
+    //console.log(cgpasem4total);
+    //console.log(parseFloat(sem3credit) + parseFloat(sem3credit));
+    //console.log(sem3credit);
     // //console.log(sem1totsum);
     // //console.log(sem2totsum);
     //console.log(totalsum);
     //console.log(totalcredit);
-    //console.log(cgpasem5total);
-    document.getElementById("totalitsum5").value =
+    //console.log(cgpasem4total);
+    document.getElementById("totalaidssum4").value =
       parseFloat(totalsum).toFixed(3);
-    document.getElementById("totalcreditit5").value = totalcredit;
+    document.getElementById("totalcreditaids4").value = totalcredit;
   }
 
   const handleSubmit = async (e) => {
@@ -175,11 +178,11 @@ const Itsem5r2020 = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/itsem5", data);
+      const response = await axios.post("http://localhost:5000/aidssem4", data);
 
       //console.log(response.data);
       if (response.status) {
-        alert("Data inserted successfully");
+        alert("Data inserted successfully sem4");
       }
     } catch (error) {
       console.error("Error posting data:", error);
@@ -190,18 +193,17 @@ const Itsem5r2020 = () => {
       }
     }
   };
-
   return (
     <>
-      <div className="container flex flex-wrap justify-center items-center">
+      <div className="container flex flex-wrap justify-center ">
         {/* STARTING OF SEMESTER 2 TABLE CGPA CALCULATION */}
         <div>
           {" "}
           {/* CGPA RENDER AREA ------------------------------------------------------- */}
           <div className=" flex flex-wrap gap-4 m-5 p-5 flex-col  justify-center">
             <div className="container">
-              <h1 className="roboto-bold text-xl text-center">
-                CGPA FOR SEMESTER-V
+              <h1 className="roboto-bold flex flex-wrap justify-center text-xl text-center">
+                CGPA FOR SEMESTER-IV
               </h1>
               <div>
                 {/* TABLE STARTING--------------------------------------------------- */}
@@ -218,13 +220,13 @@ const Itsem5r2020 = () => {
                     <tbody>
                       <tr>
                         <th>
-                          Internet of Things <br /> [Lab + Theory]
+                          Data Warehousing <br /> and <br /> Data Mining
                         </th>
-                        <th>4</th>
+                        <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectitsem5"
+                              className="form-select selectaidssem4"
                               id="inputGroupSelect01"
                             >
                               <option selected="">Choose...</option>
@@ -241,16 +243,13 @@ const Itsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Data Communication <br /> and Networks <br /> [Lab +
-                          Theory]
-                        </th>
-                        <th>4</th>
+                        <th>Introduction To Computer Network</th>
+                        <th>3</th>
 
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectitsem5"
+                              className="form-select selectaidssem4"
                               id="inputGroupSelect02"
                             >
                               <option selected="">Choose...</option>
@@ -267,14 +266,12 @@ const Itsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Wireless Adhoc <br /> and Sensor Networks
-                        </th>
-                        <th>3</th>
+                        <th>Concepts in Data Science</th>
+                        <th>4</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectitsem5"
+                              className="form-select selectaidssem4"
                               id="inputGroupSelect03"
                             >
                               <option selected="">Choose...</option>
@@ -291,12 +288,14 @@ const Itsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Wireless Communication</th>
+                        <th>
+                          Fundamentals of <br /> Software Engineering
+                        </th>
                         <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectitsem5"
+                              className="form-select selectaidssem4"
                               id="inputGroupSelect04"
                             >
                               <option selected="">Choose...</option>
@@ -311,14 +310,36 @@ const Itsem5r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
-                        <th>Professional Ethics</th>
+                        <th>
+                          Advanced Artificial <br /> Intelligece Systems
+                        </th>
                         <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectitsem5"
+                              className="form-select selectaidssem4"
+                              id="inputGroupSelect06"
+                            >
+                              <option selected="">Choose...</option>
+                              <option value="O">O</option>
+                              <option value="Aplus">Aplus</option>
+                              <option value="A">A</option>
+                              <option value="Bplus">Bplus</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="other">OTHER</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>E-WASTE MANAGEMENT</th>
+                        <th>3</th>
+                        <td>
+                          <div className="input-group mb-3">
+                            <select
+                              className="form-select selectaidssem4"
                               id="inputGroupSelect06"
                             >
                               <option selected="">Choose...</option>
@@ -337,13 +358,15 @@ const Itsem5r2020 = () => {
                       <tr>
                         {" "}
                         <th>
-                          Internet Programming <br /> [Lab + Theory]
+                          Communication Skills
+                          <br />
+                          Laboratory
                         </th>
-                        <th>4</th>
+                        <th>1.0</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectitsem5"
+                              className="form-select selectaidssem4"
                               id="inputGroupSelect07"
                             >
                               <option selected="">Choose...</option>
@@ -360,12 +383,55 @@ const Itsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Career Guidance - 1</th>
+                        <th>Database Mining Tools Laboratory</th>
+                        <th>1.5</th>
+                        <td>
+                          <div className="input-group mb-3">
+                            <select
+                              className="form-select selectaidssem4"
+                              id="inputGroupSelect07"
+                            >
+                              <option selected="">Choose...</option>
+                              <option value="O">O</option>
+                              <option value="Aplus">Aplus</option>
+                              <option value="A">A</option>
+                              <option value="Bplus">Bplus</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="other">OTHER</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th>Networks Laboratory</th>
+                        <th>1.5</th>
+                        <td>
+                          <div className="input-group mb-3">
+                            <select
+                              className="form-select selectaidssem4"
+                              id="inputGroupSelect07"
+                            >
+                              <option selected="">Choose...</option>
+                              <option value="O">O</option>
+                              <option value="Aplus">Aplus</option>
+                              <option value="A">A</option>
+                              <option value="Bplus">Bplus</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="other">OTHER</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Constitution of India</th>
                         <th>0</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectitsem5"
+                              className="form-select selectaidssem4"
                               id="inputGroupSelect07"
                             >
                               <option selected="">Choose...</option>
@@ -485,7 +551,7 @@ const Itsem5r2020 = () => {
                       <br />
                       <input
                         type="text"
-                        id="totcreditregit5"
+                        id="totcreditregaids4"
                         placeholder="TOTAL Credits"
                         className={`${
                           printaction
@@ -497,7 +563,7 @@ const Itsem5r2020 = () => {
                       <br />
                       <input
                         type="text"
-                        id="totsumvalueit5"
+                        id="totsumvalueaids4"
                         placeholder="TOTAL SUM"
                         className={`${
                           printaction
@@ -521,8 +587,8 @@ const Itsem5r2020 = () => {
                       </label>
                       <input
                         type="integer"
-                        id="itprevcredit5"
-                        name="itprevcredit"
+                        id="aidsprevcredit4"
+                        name="aidsprevcredit"
                         value={"0"}
                         placeholder="Ex: 4.0 "
                         className={`${
@@ -537,7 +603,7 @@ const Itsem5r2020 = () => {
                         tabIndex="0"
                         className="p-2 m-3 font-bold border-blue-700 border text-center rounded-lg w-72 bg-blue-800 text-white hover:transition-all "
                         onClick={() => {
-                          get5();
+                          get4();
                           setRefresh(true);
                         }}
                       >
@@ -546,8 +612,8 @@ const Itsem5r2020 = () => {
                       <input
                         type="text"
                         className="p-2 m-3 font-bold border-blue-700 border rounded-lg w-72 text-center"
-                        name="gpa5"
-                        id="itgpa5"
+                        name="gpa4"
+                        id="aidsgpa4"
                         readOnly
                       />
                       <br />
@@ -598,7 +664,7 @@ const Itsem5r2020 = () => {
                         tabIndex="0"
                         className=" p-2 m-3 font-bold border-blue-700 border text-center rounded-lg w-72 bg-blue-800 text-white hover:transition-all"
                         onClick={() => {
-                          sem5cgpacalc();
+                          sem4cgpacalc();
                         }}
                       >
                         YOUR CGPA{" "}
@@ -606,11 +672,11 @@ const Itsem5r2020 = () => {
                       <input
                         type="text"
                         className="p-2 m-3 font-bold border-blue-700 border text-center rounded-lg w-72"
-                        name="cgpa5"
-                        id="totcitgpa5"
+                        name="cgpa4"
+                        id="totcaidsgpa4"
                         readOnly
                       />
-                      {/* {to add total values in it sem 3 table database} */}
+                      {/* {to add total values in aids sem 3 table database} */}
                       <input
                         type="text"
                         className={`${
@@ -618,8 +684,8 @@ const Itsem5r2020 = () => {
                             ? "printaction"
                             : "p-2 m-3 font-bold border-blue-700 border text-center rounded-lg w-72 hidden"
                         }`}
-                        name="ittotsum"
-                        id="totalitsum5"
+                        name="aidstotsum"
+                        id="totalaidssum4"
                         readOnly
                       />
                       <input
@@ -629,8 +695,8 @@ const Itsem5r2020 = () => {
                             ? "printaction"
                             : "p-2 m-3 font-bold border-blue-700 border text-center rounded-lg w-72 hidden"
                         }`}
-                        name="ittotcredit"
-                        id="totalcreditit5"
+                        name="aidstotcredit"
+                        id="totalcreditaids4"
                         readOnly
                       />
                       {/* {-------------------------------------------------------------------} */}
@@ -704,4 +770,4 @@ const Itsem5r2020 = () => {
   );
 };
 
-export default Itsem5r2020;
+export default Aidssem4r2020;
