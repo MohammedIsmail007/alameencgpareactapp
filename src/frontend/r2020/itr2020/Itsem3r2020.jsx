@@ -635,8 +635,8 @@ const Itsem3r2020 = () => {
                             Select a registration number
                           </option>
                           {regnos.map((student) => (
-                            <option key={student.regno} value={student.regno}>
-                              {student.regno}
+                            <option key={student.regno2} value={student.regno2}>
+                              {student.regno2}
                             </option>
                           ))}
                         </select>
@@ -657,23 +657,6 @@ const Itsem3r2020 = () => {
                             </p>
                             <p>
                               <strong>Department:</strong> {studentData.dpt}
-                            </p>
-                            <p>
-                              <strong>Total Sum:</strong> {studentData.totsum2}
-                            </p>
-                            <p>
-                              <strong>Total Credit:</strong>{" "}
-                              {studentData.totcredit2}
-                            </p>
-                            <p>
-                              <strong>Previous Credit:</strong>{" "}
-                              {studentData.prevcredit2}
-                            </p>
-                            <p>
-                              <strong>GPA:</strong> {studentData.gpa2}
-                            </p>
-                            <p>
-                              <strong>CGPA:</strong> {studentData.cgpa2}
                             </p>
                           </div>
                         )}

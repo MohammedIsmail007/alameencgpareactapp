@@ -100,11 +100,11 @@ app.get('/sem1/:regno', (req, res) => {
 
 app.post('/sem2', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM sem2 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM sem2 WHERE regno2 = ?';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO sem2 (`regno`, `totsum2`, `totcredit2`, `prevcredit2`, `gpa2`,`cgpa2`) VALUES (?)";
+            const sql = "INSERT INTO sem2 (`regno2`, `totsum2`, `totcredit2`, `prevcredit2`, `gpa2`,`cgpa2`) VALUES (?)";
             const values = [req.body.regno,
             req.body.totsum2,
             req.body.totcredit2,
@@ -128,7 +128,7 @@ app.get('/sem2/:regno', (req, res) => {
     const sql = `
         SELECT s.regno, s.name, s.dpt, sem2.totsum2, sem2.totcredit2, sem2.prevcredit2, sem2.gpa2, sem2.cgpa2 
         FROM students s
-        JOIN sem2 ON s.regno = sem2.regno
+        JOIN sem2 ON s.regno = sem2.regno2
         WHERE s.regno = ?`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
