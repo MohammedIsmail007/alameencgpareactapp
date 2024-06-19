@@ -4,7 +4,7 @@ const Footer = () => {
   const year = new Date();
   return (
     <div className="text-center font-light font-sans">
-      &copy; By Mohammed Ismail III CSE {year.getFullYear()}{" "}
+      &copy;{year.getFullYear()} By Mohammed Ismail IV CSE{" "}
     </div>
   );
 };

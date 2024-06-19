@@ -198,7 +198,6 @@ const Csesem4r2020 = () => {
       <div className="container flex flex-wrap justify-center ">
         {/* STARTING OF SEMESTER 2 TABLE CGPA CALCULATION */}
         <div>
-          {" "}
           {/* CGPA RENDER AREA ------------------------------------------------------- */}
           <div className=" flex flex-wrap gap-4 m-5 p-5 flex-col  justify-center">
             <div className="container">
@@ -208,7 +207,6 @@ const Csesem4r2020 = () => {
               <div>
                 {/* TABLE STARTING--------------------------------------------------- */}
                 <div className="justify-center flex flex-wrap p-3  gap-3">
-                  {" "}
                   <table className="table-bordered border-2 rounded-sm gap-5 bg-white text-center">
                     <thead>
                       <tr>
@@ -332,7 +330,6 @@ const Csesem4r2020 = () => {
                       </tr>
 
                       <tr>
-                        {" "}
                         <th>
                           Communication Skills
                           <br />
@@ -737,13 +734,6 @@ const Csesem4r2020 = () => {
 
               {/* CGPA CALCULATION BUTTON AREA END ------------------*/}
               <br />
-              <div className=" flex flex-wrap justify-center">
-                <p>
-                  {" "}
-                  <b>NOTE: </b>CLICK THE <b>RELOAD</b> BUTTON TO ENTER NEW
-                  CALCULATION
-                </p>
-              </div>
             </div>{" "}
             <br />
           </div>

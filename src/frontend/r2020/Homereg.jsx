@@ -49,7 +49,9 @@ const Homereg = () => {
             </Link>
           </button>
           <button className=" bg-blue-800 rounded-lg p-3 text-white  hover:scale-110 hover:transition hover:ease-linear">
-            <h2>ELECTRONICS & ELECTRICAL ENGINEERING</h2>
+            <Link to="/eeer2020">
+              <h2>ELECTRONICS & ELECTRICAL ENGINEERING</h2>
+            </Link>
           </button>
 
           <button className=" bg-blue-800 rounded-lg p-3 text-white  hover:scale-110 hover:transition hover:ease-linear">

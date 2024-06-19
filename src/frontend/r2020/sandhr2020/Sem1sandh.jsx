@@ -719,13 +719,6 @@ const Sandhhome = () => {
 
               {/* CGPA CALCULATION BUTTON AREA END ------------------*/}
               <br />
-              <div className=" flex flex-wrap justify-center container">
-                <p>
-                  {" "}
-                  <b>NOTE: </b>CLICK THE <b>RELOAD</b> BUTTON TO ENTER NEW
-                  CALCULATION
-                </p>
-              </div>
             </div>{" "}
             <br />
           </div>

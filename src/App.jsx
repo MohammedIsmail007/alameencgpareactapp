@@ -7,6 +7,7 @@ import Sandhhome from "./frontend/r2020/sandhr2020/Sandhhome";
 import Cser2020home from "./frontend/r2020/cser2020/Cser2020home";
 import Itr2020home from "./frontend/r2020/itr2020/Itr2020home";
 import Aidsr2020home from "./frontend/r2020/aidsr2020/Aidsr2020home";
+import Eeer2020home from "./frontend/r2020/eeer2020/Eeer2020home";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/cser2020" element={<Cser2020home />}></Route>
           <Route path="/itr2020" element={<Itr2020home />}></Route>
           <Route path="/aidsr2020" element={<Aidsr2020home />}></Route>
+          <Route path="/eeer2020" element={<Eeer2020home />}></Route>
         </Routes>
       </BrowserRouter>
     </>

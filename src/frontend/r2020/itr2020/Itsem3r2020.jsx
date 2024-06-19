@@ -198,7 +198,7 @@ const Itsem3r2020 = () => {
           {" "}
           {/* CGPA RENDER AREA ------------------------------------------------------- */}
           <div className="flex flex-wrap gap-4 m-5 p-5 flex-col  justify-center">
-            <div className="container">
+            <div className="container flex flex-wrap justify-center">
               <h1 className=" roboto-bold flex flex-wrap justify-center text-xl text-center">
                 CGPA FOR SEMESTER-III
               </h1>
@@ -752,13 +752,6 @@ const Itsem3r2020 = () => {
 
               {/* CGPA CALCULATION BUTTON AREA END ------------------*/}
               <br />
-              <div className=" flex flex-wrap justify-center container">
-                <p>
-                  {" "}
-                  <b>NOTE: </b>CLICK THE <b>RELOAD</b> BUTTON TO ENTER NEW
-                  CALCULATION
-                </p>
-              </div>
             </div>{" "}
             <br />
           </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Csesem6r2020 = () => {
+const Eeesem5r2020 = () => {
   const [regnos, setRegnos] = useState([]);
   const [selectedRegno, setSelectedRegno] = useState("");
   const [studentData, setStudentData] = useState(null);
@@ -15,7 +15,7 @@ const Csesem6r2020 = () => {
 
   const fetchRegnos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/csesem5"); // Update this endpoint as necessary
+      const response = await axios.get("http://localhost:5000/eeesem4"); // Update this endpoint as necessary
       setRegnos(response.data);
     } catch (error) {
       console.error("Error fetching registration numbers:", error);
@@ -27,7 +27,7 @@ const Csesem6r2020 = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `http://localhost:5000/csesem5/${regno}`
+        `http://localhost:5000/eeesem4/${regno}`
       );
       setStudentData(response.data);
     } catch (error) {
@@ -95,62 +95,62 @@ const Csesem6r2020 = () => {
   //arrear calculation ----------------------------------------------------------------
 
   const [printaction, setPrintAction] = useState(false);
-  var csevale6 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var csesem6 = [4, 3, 3, 3, 4, 4, 0];
-  var csesum6 = 0;
-  var csegpa6 = [];
-  var csetot6 = 0;
-  var mulcsesum6 = 0;
+  var eeevale5 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
+  var eeesem5 = [3, 3, 4, 4, 3, 3, 0];
+  var eeesum5 = 0;
+  var eeegpa5 = [];
+  var eeetot5 = 0;
+  var muleeesum5 = 0;
 
   function get5() {
-    var ses = document.getElementsByClassName("selectcsesem6");
-    var creditregcse6 = 0; // Initialize creditreg to 0
-    csesum6 = 0; // Ensure sum1 is reset
-    csegpa6 = []; // Ensure gpa1 is reset
+    var ses = document.getElementsByClassName("selecteeesem5");
+    var creditregeee4 = 0; // Initialize creditreg to 0
+    eeesum5 = 0; // Ensure sum1 is reset
+    eeegpa5 = []; // Ensure gpa1 is reset
 
     for (var i = 0; i < ses.length; i++) {
-      var val6 = ses[i].options[ses[i].selectedIndex].value;
-      csegpa6.push(csevale6[val6] * csesem6[i]);
-      csesum6 += csevale6[val6] * csesem6[i];
+      var val4 = ses[i].options[ses[i].selectedIndex].value;
+      eeegpa5.push(eeevale5[val4] * eeesem5[i]);
+      eeesum5 += eeevale5[val4] * eeesem5[i];
 
       // Update creditreg only if the selected option is not "other"
-      if (val6 !== "other") {
-        creditregcse6 += csesem6[i];
+      if (val4 !== "other") {
+        creditregeee4 += eeesem5[i];
       }
     }
 
     // Calculate the GPA
-    mulcsesum6 = csesum6;
+    muleeesum5 = eeesum5;
     //const prevcredit = parseFloat(studentData.prevcredit);
 
     //////console.log(creditreg);
-    csetot6 = creditregcse6 === 0 ? 0 : (mulcsesum6 / creditregcse6).toFixed(3);
+    eeetot5 = creditregeee4 === 0 ? 0 : (muleeesum5 / creditregeee4).toFixed(3);
 
     // Update the form fields
-    document.getElementById("totcreditregcse6").value = creditregcse6;
-    document.getElementById("totsumvaluecse6").value = csesum6;
-    document.getElementById("csegpa6").value = csetot6;
+    document.getElementById("totcreditregeee5").value = creditregeee4;
+    document.getElementById("totsumvalueeee5").value = eeesum5;
+    document.getElementById("eeegpa5").value = eeetot5;
   }
 
   // ////console.log(studentData.totcredit);
   function sem5cgpacalc() {
-    const prevcredit = document.getElementById("cseprevcredit6").value;
-    const sem5credit =
-      parseFloat(studentData.csetotcredit) + parseFloat(prevcredit);
-    const sem5totsum = parseFloat(studentData.csetotsum);
-    const sem6totsum = document.getElementById("totsumvaluecse6").value;
-    const sem6credit = document.getElementById("totcreditregcse6").value;
+    const prevcredit = document.getElementById("eeeprevcredit5").value;
+    const sem4credit =
+      parseFloat(studentData.eeetotcredit) + parseFloat(prevcredit);
+    const sem4totsum = parseFloat(studentData.eeetotsum);
+    const sem5totsum = document.getElementById("totsumvalueeee5").value;
+    const sem5credit = document.getElementById("totcreditregeee5").value;
 
     const totalsum =
+      parseFloat(sem4totsum) +
       parseFloat(sem5totsum) +
-      parseFloat(sem6totsum) +
       parseFloat(arreartotalgrades);
     const totalcredit =
+      parseFloat(sem4credit) +
       parseFloat(sem5credit) +
-      parseFloat(sem6credit) +
       parseFloat(arreartotalcreditscore);
-    const cgpasem6total = totalsum / totalcredit;
-    document.getElementById("totccsegpa6").value = cgpasem6total.toFixed(2);
+    const cgpasem5total = totalsum / totalcredit;
+    document.getElementById("totceeegpa5").value = cgpasem5total.toFixed(2);
     ////console.log("total credit", totalcredit);
     ////console.log(prevcredit);
     ////console.log(cgpasem5total);
@@ -161,9 +161,9 @@ const Csesem6r2020 = () => {
     //console.log(totalsum);
     //console.log(totalcredit);
     //console.log(cgpasem5total);
-    document.getElementById("totalcsesum6").value =
+    document.getElementById("totaleeesum5").value =
       parseFloat(totalsum).toFixed(3);
-    document.getElementById("totalcreditcse6").value = totalcredit;
+    document.getElementById("totalcrediteee5").value = totalcredit;
   }
 
   const handleSubmit = async (e) => {
@@ -177,7 +177,7 @@ const Csesem6r2020 = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/csesem6", data);
+      const response = await axios.post("http://localhost:5000/eeesem5", data);
 
       //console.log(response.data);
       if (response.status) {
@@ -192,7 +192,6 @@ const Csesem6r2020 = () => {
       }
     }
   };
-
   return (
     <>
       <div className="container flex flex-wrap justify-center items-center">
@@ -203,7 +202,7 @@ const Csesem6r2020 = () => {
           <div className=" flex flex-wrap gap-4 m-5 p-5 flex-col  justify-center">
             <div className="container">
               <h1 className="roboto-bold text-xl text-center">
-                CGPA FOR SEMESTER-VI
+                CGPA FOR SEMESTER-V
               </h1>
               <div>
                 {/* TABLE STARTING--------------------------------------------------- */}
@@ -219,12 +218,12 @@ const Csesem6r2020 = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <th>Block Chain Technology</th>
-                        <th>4</th>
+                        <th>SENSORS AND TRANSDUCERS</th>
+                        <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectcsesem6"
+                              className="form-select selecteeesem5"
                               id="inputGroupSelect01"
                             >
                               <option selected="">Choose...</option>
@@ -241,13 +240,13 @@ const Csesem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Software Engineering</th>
+                        <th>POWER ELECTRONICS</th>
                         <th>3</th>
 
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectcsesem6"
+                              className="form-select selecteeesem5"
                               id="inputGroupSelect02"
                             >
                               <option selected="">Choose...</option>
@@ -264,14 +263,12 @@ const Csesem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Data Ware housing <br /> and Data Mining{" "}
-                        </th>
-                        <th>3</th>
+                        <th>MODERN POWER CONVERTERS</th>
+                        <th>4</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectcsesem6"
+                              className="form-select selecteeesem5"
                               id="inputGroupSelect03"
                             >
                               <option selected="">Choose...</option>
@@ -288,14 +285,12 @@ const Csesem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Cyber Crime <br /> and <br /> Cyber Forensics
-                        </th>
-                        <th>3</th>
+                        <th>OOPS WITH DATA STRUCTURES</th>
+                        <th>4</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectcsesem6"
+                              className="form-select selecteeesem5"
                               id="inputGroupSelect04"
                             >
                               <option selected="">Choose...</option>
@@ -312,14 +307,12 @@ const Csesem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Compiler Design <br /> [Lab + theory]{" "}
-                        </th>
-                        <th>4</th>
+                        <th>RENEWABLE ENERGY SOURCES</th>
+                        <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectcsesem6"
+                              className="form-select selecteeesem5"
                               id="inputGroupSelect06"
                             >
                               <option selected="">Choose...</option>
@@ -336,16 +329,12 @@ const Csesem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        {" "}
-                        <th>
-                          Object Oriented <br /> Analysis & Design <br />
-                          [Lab + Theory]
-                        </th>
-                        <th>4</th>
+                        <th>OOPS AND DATA STRUCTURES Laboratory</th>
+                        <th>0</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectcsesem6"
+                              className="form-select selecteeesem5"
                               id="inputGroupSelect07"
                             >
                               <option selected="">Choose...</option>
@@ -360,14 +349,39 @@ const Csesem6r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
-                        <th>Career Guidance - II</th>
+                        <th>
+                          CONTROL SYSTEMS <br /> [LAB + THEORY]
+                        </th>
                         <th>0</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
-                              className="form-select selectcsesem6"
+                              className="form-select selecteeesem5"
+                              id="inputGroupSelect07"
+                            >
+                              <option selected="">Choose...</option>
+                              <option value="O">O</option>
+                              <option value="Aplus">Aplus</option>
+                              <option value="A">A</option>
+                              <option value="Bplus">Bplus</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="other">OTHER</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          MICRO PROCESSOR & <br /> MICRO CONTROLLER <br /> [lab
+                          + theory]
+                        </th>
+                        <th>0</th>
+                        <td>
+                          <div className="input-group mb-3">
+                            <select
+                              className="form-select selecteeesem5"
                               id="inputGroupSelect07"
                             >
                               <option selected="">Choose...</option>
@@ -487,7 +501,7 @@ const Csesem6r2020 = () => {
                       <br />
                       <input
                         type="text"
-                        id="totcreditregcse6"
+                        id="totcreditregeee5"
                         placeholder="TOTAL Credits"
                         className={`${
                           printaction
@@ -499,7 +513,7 @@ const Csesem6r2020 = () => {
                       <br />
                       <input
                         type="text"
-                        id="totsumvaluecse6"
+                        id="totsumvalueeee5"
                         placeholder="TOTAL SUM"
                         className={`${
                           printaction
@@ -523,8 +537,8 @@ const Csesem6r2020 = () => {
                       </label>
                       <input
                         type="integer"
-                        id="cseprevcredit6"
-                        name="cseprevcredit"
+                        id="eeeprevcredit5"
+                        name="eeeprevcredit"
                         value={"0"}
                         placeholder="Ex: 4.0 "
                         className={`${
@@ -548,8 +562,8 @@ const Csesem6r2020 = () => {
                       <input
                         type="text"
                         className="p-2 m-3 font-bold border-blue-700 border rounded-lg w-72 text-center"
-                        name="gpa6"
-                        id="csegpa6"
+                        name="gpa5"
+                        id="eeegpa5"
                         readOnly
                       />
                       <br />
@@ -567,13 +581,13 @@ const Csesem6r2020 = () => {
                           className=" rounded-md p-2 w-full  mt-2 text-black"
                         />
                         {/* <option value="" className="text-black">
-                          Select a registration number
-                        </option>
-                        {regnos.map((student) => (
-                          <option key={student.regno2} value={student.regno2}>
-                            {student.regno2}
-                          </option>
-                        ))} */}
+                      Select a registration number
+                    </option>
+                    {regnos.map((student) => (
+                      <option key={student.regno2} value={student.regno2}>
+                        {student.regno2}
+                      </option>
+                    ))} */}
 
                         {loading && <div>Loading...</div>}
                         {error && <div>Error: {error.message}</div>}
@@ -608,11 +622,11 @@ const Csesem6r2020 = () => {
                       <input
                         type="text"
                         className="p-2 m-3 font-bold border-blue-700 border text-center rounded-lg w-72"
-                        name="cgpa6"
-                        id="totccsegpa6"
+                        name="cgpa5"
+                        id="totceeegpa5"
                         readOnly
                       />
-                      {/* {to add total values in cse sem 3 table database} */}
+                      {/* {to add total values in eee sem 3 table database} */}
                       <input
                         type="text"
                         className={`${
@@ -620,8 +634,8 @@ const Csesem6r2020 = () => {
                             ? "printaction"
                             : "p-2 m-3 font-bold border-blue-700 border text-center rounded-lg w-72 hidden"
                         }`}
-                        name="csetotsum"
-                        id="totalcsesum6"
+                        name="eeetotsum"
+                        id="totaleeesum5"
                         readOnly
                       />
                       <input
@@ -631,8 +645,8 @@ const Csesem6r2020 = () => {
                             ? "printaction"
                             : "p-2 m-3 font-bold border-blue-700 border text-center rounded-lg w-72 hidden"
                         }`}
-                        name="csetotcredit"
-                        id="totalcreditcse6"
+                        name="eeetotcredit"
+                        id="totalcrediteee5"
                         readOnly
                       />
                       {/* {-------------------------------------------------------------------} */}
@@ -699,4 +713,4 @@ const Csesem6r2020 = () => {
   );
 };
 
-export default Csesem6r2020;
+export default Eeesem5r2020;
