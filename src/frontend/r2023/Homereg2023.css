@@ -1,0 +1,11 @@
+.homereg {
+  /* background-color: rgb(255, 255, 255); */
+  background-image: url("/src/assets/regbg2020.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  mix-blend-mode: soft-light;
+}
+
+/* 
+  background-image: radial-gradient(circle at top right, rgb(105, 135, 213) 0%, rgb(105, 135, 213) 14.286%,rgb(94, 121, 206) 14.286%, rgb(94, 121, 206) 28.572%,rgb(82, 107, 199) 28.572%, rgb(82, 107, 199) 42.858%,rgb(71, 94, 193) 42.858%, rgb(71, 94, 193) 57.144%,rgb(59, 80, 186) 57.144%, rgb(59, 80, 186) 71.43%,rgb(48, 66, 179) 71.43%, rgb(48, 66, 179) 85.716%,rgb(36, 52, 172) 85.716%, rgb(36, 52, 172) 100.002%); */

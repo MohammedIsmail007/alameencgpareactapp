@@ -27,7 +27,7 @@ const Regulations = () => {
             data-aos="flip-up"
             data-aos-duration="1000"
           >
-            <Link to={"/"}>REGULATION-2023</Link>
+            <Link to={"/regulations2023"}>REGULATION-2023</Link>
           </button>
         </div>
       </div>

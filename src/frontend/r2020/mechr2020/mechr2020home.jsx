@@ -1,13 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import Footer from "../../Footer.jsx";
-import Csesem3r2020 from "./csesem3r2020.jsx";
-import Csesem4r2020 from "./Csesem4r2020.jsx";
-import Csesem5r2020 from "./Csesem5r2020.jsx";
+import Footer from "../../Footer";
+import Mechsem3r2020 from "./Mechsem3r2020";
+import Mechsem4r2020 from "./Mechsem4r2020";
+import Mechsem5r2020 from "./Mechsem5r2020";
+import Mechsem6r2020 from "./Mechsem6r2020";
 
-import Csesem6r2020 from "./Csesem6r2020.jsx";
-
-const Cser2020home = () => {
+const mechr2020home = () => {
   const [sem3, setSem3] = useState(false);
   const [sem4, setSem4] = useState(false);
   const [sem5, setSem5] = useState(false);
@@ -113,16 +112,16 @@ const Cser2020home = () => {
         {/* END OF SEM SELECTION------------------------------------------------------ */}
         <div className=" flex flex-wrap justify-center flex-col container">
           <div className={`${sem3 ? "sem1calc container" : "semcalc"} `}>
-            <Csesem3r2020 />
+            <Mechsem3r2020 />
           </div>
           <div className={`${sem4 ? "sem1calc container" : "semcalc"} `}>
-            <Csesem4r2020 />
+            <Mechsem4r2020 />
           </div>
           <div className={`${sem5 ? "sem1calc container " : "semcalc"} `}>
-            <Csesem5r2020 />
+            <Mechsem5r2020 />
           </div>
           <div className={`${sem6 ? "sem1calc container" : "semcalc"} `}>
-            <Csesem6r2020 />
+            <Mechsem6r2020 />
           </div>
           <div className={`${sem7 ? "sem1calc container" : "semcalc"} `}>
             sem 7
@@ -140,4 +139,4 @@ const Cser2020home = () => {
   );
 };
 
-export default Cser2020home;
+export default mechr2020home;
