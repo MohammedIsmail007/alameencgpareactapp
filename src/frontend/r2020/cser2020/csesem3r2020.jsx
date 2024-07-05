@@ -236,7 +236,6 @@ const Csesem3r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
                         <th>
                           Data Structures &amp; <br />
@@ -261,7 +260,6 @@ const Csesem3r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
                         <th>
                           Digital Principles and <br />
@@ -286,7 +284,6 @@ const Csesem3r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
                         <th>Computer Architecture</th>
                         <th>3</th>
@@ -308,7 +305,6 @@ const Csesem3r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
                         <th>Object Oriented programing with java</th>
                         <th>3</th>
@@ -330,7 +326,6 @@ const Csesem3r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
                         <th>
                           Data Structures <br />
@@ -355,7 +350,6 @@ const Csesem3r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
                         <th>
                           Object Oriented Programming with Java Laboratory
@@ -379,7 +373,6 @@ const Csesem3r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
                         <th>
                           Digital Systems <br />
@@ -404,7 +397,6 @@ const Csesem3r2020 = () => {
                           </div>
                         </td>
                       </tr>
-
                       <tr>
                         <th>Constitution Of India</th>
                         <th>0</th>

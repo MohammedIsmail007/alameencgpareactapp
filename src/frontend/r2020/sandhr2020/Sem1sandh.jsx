@@ -421,6 +421,7 @@ const Sem1sandh = () => {
         {/* CGPA CALCULATION BUTTON AREA END ------------------*/}
         <br />
       </div>
+      <Footer />
     </div>
   );
 };

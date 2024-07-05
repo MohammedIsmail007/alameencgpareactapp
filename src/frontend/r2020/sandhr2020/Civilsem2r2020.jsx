@@ -95,7 +95,7 @@ const Civilsem2r2020 = () => {
 
   const [printaction, setPrintAction] = useState(false);
   var vale2 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var civilsem22 = [4, 3, 3, 3, 1.5, 1.5, 1.5, 0, 1];
+  var civilsem22 = [4, 3, 3, 4, 3, 1.5, 1.5, 1, 0, 1];
   var sum2 = 0;
   var gpa2 = [];
   var tot2 = 0;
@@ -241,7 +241,29 @@ const Civilsem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Communicative English-II</th>
+                        <th>Engineering Geology </th>
+                        <th>3</th>
+                        <td>
+                          <div className="input-group m-3 p-3">
+                            <select
+                              className="form-select selecteceeee"
+                              id="inputGroupSelect07"
+                            >
+                              <option>Choose...</option>
+                              <option value="O">O</option>
+                              <option value="Aplus">Aplus</option>
+                              <option value="A">A</option>
+                              <option value="Bplus">Bplus</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="other">OTHER</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th>Civil Engineering Materials and Construction-I</th>
                         <th>3</th>
                         <td>
                           <div className="input-group m-3 p-3">
@@ -263,8 +285,8 @@ const Civilsem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Basics of Electrical Engineering</th>
-                        <th>3</th>
+                        <th>Engineering Mechanics </th>
+                        <th>4</th>
                         <td>
                           <div className="input-group m-3 p-3">
                             <select
@@ -285,30 +307,8 @@ const Civilsem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Python programming</th>
+                        <th> Engineering Drawing Practices</th>
                         <th>3</th>
-                        <td>
-                          <div className="input-group m-3 p-3">
-                            <select
-                              className="form-select selectcivilsem2"
-                              id="inputGroupSelect04"
-                            >
-                              <option>Choose...</option>
-                              <option value="O">O</option>
-                              <option value="Aplus">Aplus</option>
-                              <option value="A">A</option>
-                              <option value="Bplus">Bplus</option>
-                              <option value="B">B</option>
-                              <option value="C">C</option>
-                              <option value="other">OTHER</option>
-                            </select>
-                          </div>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <th>Engineering practices laboratory</th>
-                        <th>1.5</th>
                         <td>
                           <div className="input-group m-3 p-3">
                             <select
@@ -329,7 +329,7 @@ const Civilsem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Enginneering Drawing Laboratory</th>
+                        <th>Engineering Practices Laboratory </th>
                         <th>1.5</th>
                         <td>
                           <div className="input-group m-3 p-3">
@@ -351,8 +351,8 @@ const Civilsem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Python Programing Laboratory</th>
-                        <th>1.5</th>
+                        <th>Communication Skills Laboratory </th>
+                        <th>1</th>
                         <td>
                           <div className="input-group m-3 p-3">
                             <select

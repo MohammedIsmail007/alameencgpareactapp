@@ -96,7 +96,7 @@ const Mechsem2r2020 = () => {
 
   const [printaction, setPrintAction] = useState(false);
   var vale2 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var mechsem22 = [4, 3, 3, 3, 1.5, 1.5, 1.5, 0, 1];
+  var mechsem22 = [4, 3, 3, 3, 1.5, 3, 1, 0, 1];
   var sum2 = 0;
   var gpa2 = [];
   var tot2 = 0;
@@ -283,7 +283,7 @@ const Mechsem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Python programming</th>
+                        <th>Engineering Mechanics </th>
                         <th>3</th>
                         <td>
                           <div className="input-group m-3 p-3">
@@ -327,8 +327,8 @@ const Mechsem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Enginneering Drawing Laboratory</th>
-                        <th>1.5</th>
+                        <th>Enginneering Drawing Practices</th>
+                        <th>3</th>
                         <td>
                           <div className="input-group m-3 p-3">
                             <select
@@ -349,8 +349,8 @@ const Mechsem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Python Programing Laboratory</th>
-                        <th>1.5</th>
+                        <th>Basics of Electrical Engineering Laboratory</th>
+                        <th>1</th>
                         <td>
                           <div className="input-group m-3 p-3">
                             <select

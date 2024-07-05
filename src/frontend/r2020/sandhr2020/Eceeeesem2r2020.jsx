@@ -96,7 +96,7 @@ const Eceeeesem2r2020 = () => {
 
   const [printaction, setPrintAction] = useState(false);
   var vale2 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var eceeee2 = [4, 3, 3, 3, 1.5, 1.5, 1.5, 0, 1];
+  var eceeee2 = [4, 3, 3, 4, 1.5, 1, 1.5, 1, 0, 1];
   var sum2 = 0;
   var gpa2 = [];
   var tot2 = 0;
@@ -261,7 +261,10 @@ const Eceeeesem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Basics of Electrical Engineering</th>
+                        <th>
+                          Basic Civil and <br />
+                          Mechanical Engineering
+                        </th>
                         <th>3</th>
                         <td>
                           <div className="input-group m-3 p-3">
@@ -283,8 +286,8 @@ const Eceeeesem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Python programming</th>
-                        <th>3</th>
+                        <th>Circuit Theory</th>
+                        <th>4</th>
                         <td>
                           <div className="input-group m-3 p-3">
                             <select
@@ -327,8 +330,8 @@ const Eceeeesem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Enginneering Drawing Laboratory</th>
-                        <th>1.5</th>
+                        <th>Enginneering Drawing Practice / Laboratory</th>
+                        <th>1</th>
                         <td>
                           <div className="input-group m-3 p-3">
                             <select
@@ -349,8 +352,33 @@ const Eceeeesem2r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Python Programing Laboratory</th>
+                        <th>Electrical Circuits Laboratory </th>
                         <th>1.5</th>
+                        <td>
+                          <div className="input-group m-3 p-3">
+                            <select
+                              className="form-select selecteceeee"
+                              id="inputGroupSelect07"
+                            >
+                              <option>Choose...</option>
+                              <option value="O">O</option>
+                              <option value="Aplus">Aplus</option>
+                              <option value="A">A</option>
+                              <option value="Bplus">Bplus</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="other">OTHER</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          {" "}
+                          Electronic Devices and <br />
+                          Circuits Laboratory{" "}
+                        </th>
+                        <th>1</th>
                         <td>
                           <div className="input-group m-3 p-3">
                             <select
