@@ -6,6 +6,14 @@
   border-radius: 5px;
 }
 
+.alameenbghome {
+  background-image: url("/src/assets/clgbgreg.gif");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position-x: left;
+}
+
 .alameenbg2 {
   background-image: url("/src/assets/clgbg2.gif");
   background-position: center;

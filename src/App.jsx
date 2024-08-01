@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Home from "./frontend/Home";
 
 import Homereg from "./frontend/r2020/Homereg";
 import Sandhhome from "./frontend/r2020/sandhr2020/Sandhhome";
@@ -11,13 +10,17 @@ import Eeer2020home from "./frontend/r2020/eeer2020/Eeer2020home";
 import Mechr2020home from "./frontend/r2020/mechr2020/mechr2020home";
 import Homereg2023 from "./frontend/r2023/Homereg2023";
 import Ecer2020home from "./frontend/r2020/ecer2020/Ecer2020home";
+import AdminLogin from "./frontend/AdminLogin";
+import FacultyLogin from "./frontend/FacultyLogin";
+import StudentLogin from "./frontend/StudentLogin";
+import MainHome from "./frontend/MainHome";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/" element={<MainHome />}></Route>
           <Route path="/regulations2020" element={<Homereg />}></Route>
           <Route path="/sandhhome" element={<Sandhhome />}></Route>
           <Route path="/cser2020" element={<Cser2020home />}></Route>
@@ -28,6 +31,9 @@ function App() {
           <Route path="ecer2020" element={<Ecer2020home />}></Route>
           {/* regulation 2023 */}
           <Route path="/regulations2023" element={<Homereg2023 />}></Route>
+          <Route path="/adminlogin" element={<AdminLogin />}></Route>
+          <Route path="/facultyLogin" element={<FacultyLogin />}></Route>
+          <Route path="/studentLogin" element={<StudentLogin />}></Route>
         </Routes>
       </BrowserRouter>
     </>
