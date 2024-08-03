@@ -14,6 +14,7 @@ import AdminLogin from "./frontend/AdminLogin";
 import FacultyLogin from "./frontend/FacultyLogin";
 import StudentLogin from "./frontend/StudentLogin";
 import MainHome from "./frontend/MainHome";
+import Civilr2020home from "./frontend/r2020/civilr2020/Civilr2020home";
 
 function App() {
   return (
@@ -29,8 +30,10 @@ function App() {
           <Route path="/eeer2020" element={<Eeer2020home />}></Route>
           <Route path="/mechr2020" element={<Mechr2020home />}></Route>
           <Route path="ecer2020" element={<Ecer2020home />}></Route>
+          <Route path="/civilr2020" element={<Civilr2020home />}></Route>
           {/* regulation 2023 */}
           <Route path="/regulations2023" element={<Homereg2023 />}></Route>
+          {/* LOGIN */}
           <Route path="/adminlogin" element={<AdminLogin />}></Route>
           <Route path="/facultyLogin" element={<FacultyLogin />}></Route>
           <Route path="/studentLogin" element={<StudentLogin />}></Route>
