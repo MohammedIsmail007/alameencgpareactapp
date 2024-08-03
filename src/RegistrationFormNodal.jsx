@@ -6,6 +6,7 @@ Modal.setAppElement("#root");
 const RegistrationFormModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(true);
   const [regno, setRegno] = useState("");
+  const [lateral, setLateral] = useState("");
 
   const handleCloseModal = () => {
     setModalIsOpen(false);
@@ -115,7 +116,48 @@ const RegistrationFormModal = () => {
             onChange={(e) => setRegno(e.target.value)}
             required
             className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+          />{" "}
+          <label
+            htmlFor="regno"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Are you a Lateral Entry Student ?
+          </label>
+          <div className="flex flex-row items-start m-0 justify-start">
+            <input
+              type="radio"
+              id="lateralYes"
+              name="lateral"
+              value="yes"
+              onChange={(e) => setLateral(e.target.value)}
+              placeholder="Yes"
+              required
+              className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />{" "}
+            <label
+              htmlFor="lateral"
+              className="block text-sm font-medium text-gray-700 m-0 p-0"
+            >
+              {" "}
+              Yes
+            </label>
+            <input
+              type="radio"
+              id="lateralNo"
+              name="lateral"
+              value="no"
+              onChange={(e) => setLateral(e.target.value)}
+              required
+              className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />{" "}
+            <label
+              htmlFor="lateral"
+              className="block text-sm font-medium text-gray-700"
+            >
+              {" "}
+              No
+            </label>
+          </div>
         </div>
         <button
           type="submit"

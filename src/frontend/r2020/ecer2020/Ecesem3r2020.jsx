@@ -131,36 +131,67 @@ const Ecesem3r2020 = () => {
   }
 
   // //console.log(studentData.totcredit);
-  function sem3cgpacalc() {
-    const prevcredit = document.getElementById("eceprevcredit3").value;
-    const sem2credit =
-      parseFloat(studentData.totcredit2) + parseFloat(prevcredit);
-    const sem2totsum = parseFloat(studentData.totsum2);
-    const sem3totsum = document.getElementById("totsumvalueece3").value;
-    const sem3credit = document.getElementById("totcreditregece3").value;
+  function sem3cgpacalc(lateralcheck) {
+    if (lateralcheck == "yes") {
+      const prevcredit = document.getElementById("eceprevcredit3").value;
+      const sem2credit = 0 + parseFloat(prevcredit);
+      const sem2totsum = 0;
+      const sem3totsum = document.getElementById("totsumvalueece3").value;
+      const sem3credit = document.getElementById("totcreditregece3").value;
 
-    const totalsum =
-      parseFloat(sem2totsum) +
-      parseFloat(sem3totsum) +
-      parseFloat(arreartotalgrades);
-    const totalcredit =
-      parseFloat(sem2credit) +
-      parseFloat(sem3credit) +
-      parseFloat(arreartotalcreditscore);
-    const cgpasem2total = totalsum / totalcredit;
-    document.getElementById("totcecegpa3").value = cgpasem2total.toFixed(2);
-    ////console.log(prevcredit);
-    // //console.log(cgpasem2total);
-    ////console.log(parseFloat(sem2credit) + parseFloat(sem3credit));
-    // //console.log(sem3credit);
-    // //console.log(sem1totsum);
-    // //console.log(sem2totsum);
-    // //console.log(totalsum);
-    // //console.log(totalcredit);
-    // //console.log(cgpasem2total);
-    document.getElementById("totalecesum3").value =
-      parseFloat(totalsum).toFixed(3);
-    document.getElementById("totalcreditece3").value = totalcredit;
+      const totalsum =
+        parseFloat(sem2totsum) +
+        parseFloat(sem3totsum) +
+        parseFloat(arreartotalgrades);
+      const totalcredit =
+        parseFloat(sem2credit) +
+        parseFloat(sem3credit) +
+        parseFloat(arreartotalcreditscore);
+      const cgpasem2total = totalsum / totalcredit;
+      document.getElementById("totcecegpa3").value = cgpasem2total.toFixed(2);
+      ////console.log(prevcredit);
+      // //console.log(cgpasem2total);
+      ////console.log(parseFloat(sem2credit) + parseFloat(sem3credit));
+      // //console.log(sem3credit);
+      // //console.log(sem1totsum);
+      // //console.log(sem2totsum);
+      // //console.log(totalsum);
+      // //console.log(totalcredit);
+      // //console.log(cgpasem2total);
+      document.getElementById("totalecesum3").value =
+        parseFloat(totalsum).toFixed(3);
+      document.getElementById("totalcreditece3").value = totalcredit;
+    } else {
+      const prevcredit = document.getElementById("eceprevcredit3").value;
+      const sem2credit =
+        parseFloat(studentData.totcredit2) + parseFloat(prevcredit);
+      const sem2totsum = parseFloat(studentData.totsum2);
+      const sem3totsum = document.getElementById("totsumvalueece3").value;
+      const sem3credit = document.getElementById("totcreditregece3").value;
+
+      const totalsum =
+        parseFloat(sem2totsum) +
+        parseFloat(sem3totsum) +
+        parseFloat(arreartotalgrades);
+      const totalcredit =
+        parseFloat(sem2credit) +
+        parseFloat(sem3credit) +
+        parseFloat(arreartotalcreditscore);
+      const cgpasem2total = totalsum / totalcredit;
+      document.getElementById("totcecegpa3").value = cgpasem2total.toFixed(2);
+      ////console.log(prevcredit);
+      // //console.log(cgpasem2total);
+      ////console.log(parseFloat(sem2credit) + parseFloat(sem3credit));
+      // //console.log(sem3credit);
+      // //console.log(sem1totsum);
+      // //console.log(sem2totsum);
+      // //console.log(totalsum);
+      // //console.log(totalcredit);
+      // //console.log(cgpasem2total);
+      document.getElementById("totalecesum3").value =
+        parseFloat(totalsum).toFixed(3);
+      document.getElementById("totalcreditece3").value = totalcredit;
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -646,6 +677,50 @@ const Ecesem3r2020 = () => {
                         readOnly
                       />
                       <br />
+                      {/* LATERAL ENTRY YES OR NO */}
+                      <div>
+                        <label
+                          htmlFor="regno"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Are you a Lateral Entry Student ?
+                        </label>
+                        <div className="flex flex-row items-start m-0 justify-start">
+                          <input
+                            type="radio"
+                            name="lateral"
+                            value="yes"
+                            onClick={(e) => {
+                              sem3cgpacalc(e.target.value);
+                            }}
+                            className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          />{" "}
+                          <label
+                            htmlFor="lateral"
+                            className="block text-sm font-medium text-gray-700 m-0 p-0"
+                          >
+                            {" "}
+                            Yes
+                          </label>
+                          <input
+                            type="radio"
+                            name="lateral"
+                            value="no"
+                            onClick={(e) => {
+                              sem3cgpacalc(e.target.value);
+                            }}
+                            checked
+                            className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          />{" "}
+                          <label
+                            htmlFor="lateral"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            {" "}
+                            No
+                          </label>
+                        </div>
+                      </div>
                       <div
                         className={`${
                           printaction
