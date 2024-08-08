@@ -96,7 +96,7 @@ const Civilsem5r2020 = () => {
 
   const [printaction, setPrintAction] = useState(false);
   var civilvale5 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var civilsem5 = [3, 3, 4, 4, 3, 3, 0];
+  var civilsem5 = [4, 4, 3, 3, 4, 1.5, 0];
   var civilsum5 = 0;
   var civilgpa5 = [];
   var civiltot5 = 0;
@@ -223,8 +223,8 @@ const Civilsem5r2020 = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <th>Information Security</th>
-                        <th>3</th>
+                        <th>Structural Analysis-I </th>
+                        <th>4</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -245,8 +245,10 @@ const Civilsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Computer Network</th>
-                        <th>3</th>
+                        <th>
+                          Design of Reinforced Concrete Elements and Structures
+                        </th>
+                        <th>4</th>
 
                         <td>
                           <div className="input-group mb-3">
@@ -268,8 +270,8 @@ const Civilsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Internet of Things</th>
-                        <th>4</th>
+                        <th>Renewable Energy Sources</th>
+                        <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -290,8 +292,8 @@ const Civilsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Web Technology</th>
-                        <th>4</th>
+                        <th>Industrial Safety</th>
+                        <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -312,8 +314,8 @@ const Civilsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Professional Ethics</th>
-                        <th>3</th>
+                        <th>Geotechnical Engineering-I</th>
+                        <th>4</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -335,8 +337,8 @@ const Civilsem5r2020 = () => {
 
                       <tr>
                         {" "}
-                        <th>Renewable Energy Sources</th>
-                        <th>3</th>
+                        <th>Internship & Innovation Practices </th>
+                        <th>1.5</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -357,7 +359,7 @@ const Civilsem5r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Career Guidance - 1</th>
+                        <th>Constitution of India </th>
                         <th>0</th>
                         <td>
                           <div className="input-group mb-3">

@@ -94,7 +94,7 @@ const Civilsem3r2020 = () => {
 
   const [printaction, setPrintAction] = useState(false);
   var civilvale3 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var civilsem3 = [4, 4, 4, 3, 3, 1.5, 1.5, 1.5, 3, 0];
+  var civilsem3 = [4, 3, 3, 3, 3, 1, 1, 1, 3];
   var civilsum3 = 0;
   var civilgpa3 = [];
   var civiltot3 = 0;
@@ -250,7 +250,7 @@ const Civilsem3r2020 = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <th>Probability and Queuing Theory</th>
+                        <th>Probability and Statistics</th>
                         <th>4</th>
                         <td>
                           <div className="input-group mb-3">
@@ -272,8 +272,8 @@ const Civilsem3r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Fundamentals of Operating Systems</th>
-                        <th>4</th>
+                        <th>Mechanics of Solids-I</th>
+                        <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -294,8 +294,8 @@ const Civilsem3r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Database Management Systems</th>
-                        <th>4</th>
+                        <th>Civil Engineering Materials and Construction-I</th>
+                        <th>3</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -316,7 +316,7 @@ const Civilsem3r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Foundations of Artificial Intelligence</th>
+                        <th>Fluid Mechanics </th>
                         <th>3</th>
                         <td>
                           <div className="input-group mb-3">
@@ -338,7 +338,7 @@ const Civilsem3r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Object Oriented Programming with Java</th>
+                        <th>Surveying</th>
                         <th>3</th>
                         <td>
                           <div className="input-group mb-3">
@@ -359,8 +359,8 @@ const Civilsem3r2020 = () => {
                         </td>
                       </tr>
                       <tr>
-                        <th>Intelligent Systems Laboratory</th>
-                        <th>1.5</th>
+                        <th>Surveying Laboratory</th>
+                        <th>1</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -380,10 +380,8 @@ const Civilsem3r2020 = () => {
                         </td>
                       </tr>
                       <tr>
-                        <th>
-                          Object Oriented Programming with Java Laboratory
-                        </th>
-                        <th>1.5</th>
+                        <th>Strength of Materials Laboratory</th>
+                        <th>1</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -404,8 +402,8 @@ const Civilsem3r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Database Management Systems Laboratory</th>
-                        <th>1.5</th>
+                        <th> Computer Aided Building Drawing </th>
+                        <th>1</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -426,30 +424,9 @@ const Civilsem3r2020 = () => {
                       </tr>
                       <tr>
                         <th>
-                          Universal Human Values <br /> 2: Understanding Harmony
+                          Universal Human Values 2 : Understanding Harmony
                         </th>
                         <th>3</th>
-                        <td>
-                          <div className="input-group mb-3">
-                            <select
-                              className="form-select selectcivilsem3"
-                              id="inputGroupSelect07"
-                            >
-                              <option selected="">Choose...</option>
-                              <option value="O">O</option>
-                              <option value="Aplus">Aplus</option>
-                              <option value="A">A</option>
-                              <option value="Bplus">Bplus</option>
-                              <option value="B">B</option>
-                              <option value="C">C</option>
-                              <option value="other">OTHER</option>
-                            </select>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Tamils and Technology</th>
-                        <th>0</th>
                         <td>
                           <div className="input-group mb-3">
                             <select

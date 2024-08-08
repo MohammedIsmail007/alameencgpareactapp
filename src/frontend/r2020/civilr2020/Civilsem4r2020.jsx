@@ -95,7 +95,7 @@ const Civilsem4r2020 = () => {
 
   const [printaction, setPrintAction] = useState(false);
   var civilvale4 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var civilsem4 = [3, 4, 3, 4, 3, 1.0, 1.5, 1.5, 3];
+  var civilsem4 = [3, 3, 3, 4, 3, 1, 1, 1];
   var civilsum4 = 0;
   var civilgpa4 = [];
   var civiltot4 = 0;
@@ -220,7 +220,7 @@ const Civilsem4r2020 = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <th>Microprocessor and Microcontroller</th>
+                        <th>Mechanics of Solids-II</th>
                         <th>3</th>
                         <td>
                           <div className="input-group mb-3">
@@ -242,8 +242,8 @@ const Civilsem4r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>User Interface Design</th>
-                        <th>4</th>
+                        <th>Applied Hydraulic Engineering </th>
+                        <th>3</th>
 
                         <td>
                           <div className="input-group mb-3">
@@ -265,7 +265,7 @@ const Civilsem4r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Database Management Systems</th>
+                        <th>Concrete Technology </th>
                         <th>3</th>
                         <td>
                           <div className="input-group mb-3">
@@ -287,7 +287,7 @@ const Civilsem4r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Operating Systems</th>
+                        <th>Numerical Methods</th>
                         <th>4</th>
                         <td>
                           <div className="input-group mb-3">
@@ -309,9 +309,7 @@ const Civilsem4r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          OPEN ELECTIVE - I <br /> [E-WASTE MANAGEMENT]
-                        </th>
+                        <th>Highway and Railway Engineering</th>
                         <th>3</th>
                         <td>
                           <div className="input-group mb-3">
@@ -333,12 +331,8 @@ const Civilsem4r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Communication Skills
-                          <br />
-                          Laboratory
-                        </th>
-                        <th>1.0</th>
+                        <th>Building Services</th>
+                        <th>1</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -359,8 +353,8 @@ const Civilsem4r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Database Management Systems Laboratory</th>
-                        <th>1.5</th>
+                        <th>Fluid Mechanics and Machinery Laboratory</th>
+                        <th>1</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -381,36 +375,8 @@ const Civilsem4r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Operating Systems
-                          <br />
-                          Laboratory
-                        </th>
-                        <th>1.5</th>
-                        <td>
-                          <div className="input-group mb-3">
-                            <select
-                              className="form-select selectcivilsem4"
-                              id="inputGroupSelect07"
-                            >
-                              <option selected="">Choose...</option>
-                              <option value="O">O</option>
-                              <option value="Aplus">Aplus</option>
-                              <option value="A">A</option>
-                              <option value="Bplus">Bplus</option>
-                              <option value="B">B</option>
-                              <option value="C">C</option>
-                              <option value="other">OTHER</option>
-                            </select>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          Universal Human Values <br />
-                          2: understanding Harmony
-                        </th>
-                        <th>3</th>
+                        <th>Concrete& Highway Engineering Laboratory</th>
+                        <th>1</th>
                         <td>
                           <div className="input-group mb-3">
                             <select

@@ -96,7 +96,7 @@ const Civilsem6r2020 = () => {
 
   const [printaction, setPrintAction] = useState(false);
   var csevale6 = { O: 10, Aplus: 9, A: 8, Bplus: 7, B: 6, C: 5, other: 0 };
-  var csesem6 = [4, 3, 3, 3, 4, 4, 0];
+  var csesem6 = [4, 4, 4, 3, 4, 4, 2, 2];
   var csesum6 = 0;
   var csegpa6 = [];
   var csetot6 = 0;
@@ -219,7 +219,7 @@ const Civilsem6r2020 = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <th>Block Chain Technology</th>
+                        <th>Structural Analysis-II</th>
                         <th>4</th>
                         <td>
                           <div className="input-group mb-3">
@@ -241,8 +241,8 @@ const Civilsem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Software Engineering</th>
-                        <th>3</th>
+                        <th>Design of Steel Structures </th>
+                        <th>4</th>
 
                         <td>
                           <div className="input-group mb-3">
@@ -264,10 +264,8 @@ const Civilsem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Data Ware housing <br /> and Data Mining{" "}
-                        </th>
-                        <th>3</th>
+                        <th>Geotechnical Engineering-II</th>
+                        <th>4</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
@@ -288,9 +286,7 @@ const Civilsem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Cyber Crime <br /> and <br /> Cyber Forensics
-                        </th>
+                        <th>Professional Elective - III</th>
                         <th>3</th>
                         <td>
                           <div className="input-group mb-3">
@@ -312,9 +308,7 @@ const Civilsem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>
-                          Compiler Design <br /> [Lab + theory]{" "}
-                        </th>
+                        <th>T1 Environmental Engineering</th>
                         <th>4</th>
                         <td>
                           <div className="input-group mb-3">
@@ -337,10 +331,7 @@ const Civilsem6r2020 = () => {
 
                       <tr>
                         {" "}
-                        <th>
-                          Object Oriented <br /> Analysis & Design <br />
-                          [Lab + Theory]
-                        </th>
+                        <th>Structural Design and Drawings</th>
                         <th>4</th>
                         <td>
                           <div className="input-group mb-3">
@@ -362,8 +353,29 @@ const Civilsem6r2020 = () => {
                       </tr>
 
                       <tr>
-                        <th>Career Guidance - II</th>
-                        <th>0</th>
+                        <th>Comprehensive Course</th>
+                        <th>2</th>
+                        <td>
+                          <div className="input-group mb-3">
+                            <select
+                              className="form-select selectcsesem6"
+                              id="inputGroupSelect07"
+                            >
+                              <option selected="">Choose...</option>
+                              <option value="O">O</option>
+                              <option value="Aplus">Aplus</option>
+                              <option value="A">A</option>
+                              <option value="Bplus">Bplus</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="other">OTHER</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Design Project</th>
+                        <th>2</th>
                         <td>
                           <div className="input-group mb-3">
                             <select
