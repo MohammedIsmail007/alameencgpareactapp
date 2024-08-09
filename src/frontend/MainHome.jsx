@@ -26,17 +26,17 @@ const MainHome = () => {
         </div>
         <br />
         <div
-          className="alameenbghome flex flex-wrap justify-end pr-4 roboto-regular"
-          data-aos="fade-down"
+          className="alameenbghome flex flex-wrap justify-center pr-4 roboto-regular"
+          data-aos="fade-up"
           data-aos-duration="1000"
         >
           <div>
             <div
-              className="w-auto md:w-auto flex items-center text-blue-900 text-5xl  justify-center h-screen flex-wrap flex-col"
+              className="w-auto bg-white bg-opacity-35 md:w-auto flex items-center text-blue-900 text-5xl  justify-center h-screen flex-wrap flex-col"
               data-aos="fade-up"
               data-aos-duration="1000"
             >
-              <h1 className=" text-5xl text-center font-semibold">
+              <h1 className=" text-5xl text-center font-bold">
                 REGISTER / LOGIN
               </h1>
               <br />
@@ -45,11 +45,7 @@ const MainHome = () => {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="center-bottom"
               >
-                <div className="text-center text-3xl text-blue-900 font-mono font-extrabold  flex flex-wrap justify-center items-center">
-                  LET'S{"  "}
-                  {"  "}
-                  BEGIN{" "}
-                </div>
+                <br />
                 <div className="items-center flex flex-wrap justify-center p-4 m-3  gap-2 text-lg">
                   <button
                     className=" bg-blue-800 rounded-md m-3 p-2 items-center text-white font-bold hover:scale-125"
