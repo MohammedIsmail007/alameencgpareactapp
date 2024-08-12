@@ -15,6 +15,8 @@ import FacultyLogin from "./frontend/FacultyLogin";
 import StudentLogin from "./frontend/StudentLogin";
 import MainHome from "./frontend/MainHome";
 import Civilr2020home from "./frontend/r2020/civilr2020/Civilr2020home";
+import AdminManage from "./frontend/interface/AdminManage";
+import FacultyManage from "./frontend/interface/FacultyManage";
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           <Route path="/adminlogin" element={<AdminLogin />}></Route>
           <Route path="/facultyLogin" element={<FacultyLogin />}></Route>
           <Route path="/studentLogin" element={<StudentLogin />}></Route>
+          <Route path="/admindb" element={<AdminManage />}></Route>
+          <Route path="/facultydb" element={<FacultyManage />}></Route>
         </Routes>
       </BrowserRouter>
     </>

@@ -9,12 +9,66 @@ app.use(cors());
 app.use(express.json());
 dotenv.config();
 
+
+
 const db = mysqli.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
 })
+
+const dbcse = mysqli.createConnection({
+    host: process.env.DBCSE_HOST,
+    user: process.env.DBCSE_USER,
+    password: process.env.DBCSE_PASSWORD,
+    database: process.env.DBCSE_NAME
+});
+dbcse.connect((err) => {
+    if (err) {
+        console.error('Error connecting to database CSE:', err.stack);
+        return;
+    }
+    console.log('Connected to databaseCSE as id ' + dbcse.threadId);
+});
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const query = 'SELECT * FROM login WHERE username = ? AND password = ?';
+
+    db.query(query, [username, password], (err, results) => {
+        if (err) {
+            return res.status(500).send({ success: false, message: 'Database error' });
+        }
+        if (results.length > 0) {
+            res.send({ success: true });
+        } else {
+            res.send({ success: false });
+        }
+    });
+});
+
+app.post('/facultylogin', (req, res) => {
+    const { username, password } = req.body;
+    const query = 'SELECT * FROM facultylogin WHERE username = ? AND password = ?';
+
+    db.query(query, [username, password], (err, results) => {
+        if (err) {
+            return res.status(500).send({ success: false, message: 'Database error' });
+        }
+        if (results.length > 0) {
+            res.send({ success: true });
+        } else {
+            res.send({ success: false });
+        }
+    });
+});
+app.get('/csefaculty', (req, res) => {
+    dbcse.query('SELECT * FROM csesem3', (err, result) => {
+        if (err) throw err;
+        res.json(result);
+    });
+})
+
 app.post('/users', (req, res) => {
     const sql = "INSERT INTO users (`id`,`name`,`regno`,`totcredit`, `totsum`, `prevcredit`) VALUES (?)";
     const values = [req.body.id, req.body.name, req.body.regno, req.body.totcredit, req.body.totsum, req.body.prevcredit];
@@ -2391,3 +2445,29 @@ const port = process.env.DB_PORT;
 app.listen(port, () => {
     console.log("Server is running on port 5000")
 })
+
+// FACULTY MANAGE DATA 
+app.post('/api/insert', (req, res) => {
+    const { rows } = req.body;
+    const sql = "INSERT INTO sem1r2023 (course_code, course_title, course_cred) VALUES ?";
+    const values = rows.map(row => [row.course_code, row.course_title, row.column3]);
+
+    db.query(sql, [values], (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.send(result);
+    });
+});
+
+// API route to update data
+app.put('/api/update', (req, res) => {
+    const { id, course_code, course_title, column3 } = req.body;
+    const sql = "UPDATE sem1r2023 SET course_code = ?, course_title = ?, course_cred = ? WHERE id = ?";
+    db.query(sql, [course_code, course_title, column3, id], (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.send(result);
+    });
+});
