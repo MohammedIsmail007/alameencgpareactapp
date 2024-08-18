@@ -127,7 +127,7 @@ const RegistrationFormModal = () => {
             <input
               type="radio"
               id="lateralYes"
-              name="lateral"
+              name="lateralentry"
               value="yes"
               onChange={(e) => setLateral(e.target.value)}
               placeholder="Yes"
@@ -144,7 +144,7 @@ const RegistrationFormModal = () => {
             <input
               type="radio"
               id="lateralNo"
-              name="lateral"
+              name="lateralentry"
               value="no"
               onChange={(e) => setLateral(e.target.value)}
               required

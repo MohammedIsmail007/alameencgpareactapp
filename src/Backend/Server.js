@@ -18,18 +18,12 @@ const db = mysqli.createConnection({
     database: process.env.DB_NAME
 })
 
-const dbcse = mysqli.createConnection({
-    host: process.env.DBCSE_HOST,
-    user: process.env.DBCSE_USER,
-    password: process.env.DBCSE_PASSWORD,
-    database: process.env.DBCSE_NAME
-});
-dbcse.connect((err) => {
+db.connect((err) => {
     if (err) {
         console.error('Error connecting to database CSE:', err.stack);
         return;
     }
-    console.log('Connected to databaseCSE as id ' + dbcse.threadId);
+    console.log('Connected to databaseCSE as id ' + db.threadId);
 });
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
@@ -69,21 +63,10 @@ app.get('/csefaculty', (req, res) => {
     });
 })
 
-app.post('/users', (req, res) => {
-    const sql = "INSERT INTO users (`id`,`name`,`regno`,`totcredit`, `totsum`, `prevcredit`) VALUES (?)";
-    const values = [req.body.id, req.body.name, req.body.regno, req.body.totcredit, req.body.totsum, req.body.prevcredit];
-    db.query(sql, [values], (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send("Value inserted successfully");
-        }
-    });
-});
 
 
 app.post('/students', (req, res) => {
-    const { regno, name, dpt } = req.body;
+    const { regno, name, dpt, lateralentry } = req.body;
 
     // Check if regno exists
     const checkQuery = 'SELECT * FROM students WHERE regno = ?';
@@ -95,8 +78,8 @@ app.post('/students', (req, res) => {
             res.status(409).send({ message: 'Registration number already exists' });
         } else {
             // Insert new student
-            const insertQuery = 'INSERT INTO students (regno, name, dpt) VALUES (?, ?, ?)';
-            db.query(insertQuery, [regno, name, dpt], (err, result) => {
+            const insertQuery = 'INSERT INTO students (regno, name, dpt, lateralentry) VALUES (?, ?, ?, ?)';
+            db.query(insertQuery, [regno, name, dpt, lateralentry], (err, result) => {
                 if (err) throw err;
                 res.send({ message: 'Registered successfully' });
             });

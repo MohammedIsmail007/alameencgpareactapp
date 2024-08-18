@@ -102,7 +102,11 @@ const AdminManage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <div
+      className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <h3 className="text-2xl font-semibold text-gray-800 mb-6">ADMIN PANEL</h3>
 
       {/* Table selection dropdown */}
