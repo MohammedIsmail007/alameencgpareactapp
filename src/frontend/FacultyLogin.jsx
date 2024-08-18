@@ -30,7 +30,12 @@ function FacultyLogin() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div
+      className="flex justify-center items-center h-screen bg-gray-100"
+      accordion
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold mb-6 text-center">FACULTY LOGIN</h2>
         <form onSubmit={handleLogin}>
