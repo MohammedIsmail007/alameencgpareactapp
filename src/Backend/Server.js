@@ -2448,11 +2448,11 @@ app.listen(port, () => {
 
 // FACULTY MANAGE DATA 
 app.post('/api/insert', (req, res) => {
-    const { rows } = req.body;
-    const sql = "INSERT INTO sem1r2023 (course_code, course_title, course_cred) VALUES ?";
-    const values = rows.map(row => [row.course_code, row.course_title, row.column3]);
+    const { table, rows } = req.body;  // Accept the table name from the frontend
+    const sql = `INSERT INTO ?? (course_code, course_title, course_cred) VALUES ?`;  // Use ?? for table name
+    const values = rows.map(row => [row.course_code, row.course_title, row.course_cred]);
 
-    db.query(sql, [values], (err, result) => {
+    db.query(sql, [table, values], (err, result) => {
         if (err) {
             return res.status(500).send(err);
         }
@@ -2462,12 +2462,115 @@ app.post('/api/insert', (req, res) => {
 
 // API route to update data
 app.put('/api/update', (req, res) => {
-    const { id, course_code, course_title, column3 } = req.body;
-    const sql = "UPDATE sem1r2023 SET course_code = ?, course_title = ?, course_cred = ? WHERE id = ?";
-    db.query(sql, [course_code, course_title, column3, id], (err, result) => {
+    const { table, id, course_code, course_title, course_cred } = req.body;  // Accept the table name from the frontend
+    const sql = `UPDATE ?? SET course_code = ?, course_title = ?, course_cred = ? WHERE id = ?`;  // Use ?? for table name
+
+    db.query(sql, [table, course_code, course_title, course_cred, id], (err, result) => {
         if (err) {
             return res.status(500).send(err);
         }
         res.send(result);
+    });
+});
+
+// API route to fetch table names based on user authorization
+app.get('/api/tables', (req, res) => {
+    const allowedTables = ['sem1r2023']; // Example list of tables the user is allowed to see
+
+    db.query("SHOW TABLES", (err, results) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        // Filter tables based on allowedTables array
+        const tables = results.map(row => Object.values(row)[0])
+            .filter(table => allowedTables.includes(table));
+
+        res.json(tables);
+    });
+});
+app.get("/api/tables", (req, res) => {
+    const sql = "SHOW TABLES";
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).send(err);
+        const tables = result.map((row) => Object.values(row)[0]);
+        res.json(tables);
+    });
+});
+
+// Endpoint to get fields of a selected table
+
+// Endpoint to get data of the selected table
+app.get("/api/tableData", (req, res) => {
+    const { table } = req.query;
+    if (!table) return res.status(400).send("Table name is required.");
+
+    const sql = `SELECT * FROM ${table}`;
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.json(result);
+    });
+});
+
+
+
+app.get('/api/admin/tables', (req, res) => {
+    const sql = "SHOW TABLES";
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        const tables = results.map(row => Object.values(row)[0]);
+        res.send(tables);
+    });
+});
+// API route to fetch data from a specific table
+app.get("/api/admin/tabledata", (req, res) => {
+    const { table } = req.query;
+    if (!table) {
+        return res.status(400).send("Table name is required.");
+    }
+
+    const sql = `SELECT * FROM ??`;
+    db.query(sql, [table], (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.json(result);
+    });
+});
+
+// API route to insert data into a selected table
+app.post("/api/insert", (req, res) => {
+    const { table, rows } = req.body;
+    if (!table || !rows || rows.length === 0) {
+        return res.status(400).send("Table name and rows are required.");
+    }
+
+    const columns = Object.keys(rows[0]);
+    const values = rows.map((row) => columns.map((col) => row[col]));
+
+    const sql = `INSERT INTO ?? (${columns.join(", ")}) VALUES ?`;
+    db.query(sql, [table, values], (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.json(result);
+    });
+});
+
+// API route to update data in a selected table
+app.put("/api/update", (req, res) => {
+    const { table, id, course_code, course_title, course_cred } = req.body;
+    if (!table || !id) {
+        return res.status(400).send("Table name and ID are required.");
+    }
+
+    const sql = `UPDATE ?? SET course_code = ?, course_title = ?, course_cred = ? WHERE id = ?`;
+    db.query(sql, [table, course_code, course_title, course_cred, id], (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.json(result);
     });
 });
