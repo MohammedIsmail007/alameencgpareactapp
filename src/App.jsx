@@ -24,7 +24,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainHome />}></Route>
-          <Route path="/regulations2020" element={<Homereg />}></Route>
+
           <Route path="/sandhhome" element={<Sandhhome />}></Route>
           <Route path="/cser2020" element={<Cser2020home />}></Route>
           <Route path="/itr2020" element={<Itr2020home />}></Route>
@@ -34,6 +34,7 @@ function App() {
           <Route path="ecer2020" element={<Ecer2020home />}></Route>
           <Route path="/civilr2020" element={<Civilr2020home />}></Route>
           {/* regulation 2023 */}
+          <Route path="/regulations2020" element={<Homereg />}></Route>
           <Route path="/regulations2023" element={<Homereg2023 />}></Route>
           {/* LOGIN */}
           <Route path="/adminlogin" element={<AdminLogin />}></Route>

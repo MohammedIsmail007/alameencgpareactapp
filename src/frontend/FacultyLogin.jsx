@@ -21,7 +21,6 @@ function FacultyLogin() {
     const result = await response.json();
 
     if (result.success) {
-      alert("Login successful!");
       navigate("/facultydb");
       // You can navigate to a different component or page here
     } else {
