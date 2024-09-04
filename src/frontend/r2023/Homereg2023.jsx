@@ -27,7 +27,7 @@ const Homereg2023 = () => {
           data-aos-duration="1000"
         >
           <button className=" bg-blue-800 rounded-lg p-2 text-white  hover:scale-110 hover:transition hover:ease-linear">
-            <Link to="/">
+            <Link to="/sem1sandhr2023">
               <h2>SCIENCE & HUMANITIES</h2>
             </Link>
           </button>

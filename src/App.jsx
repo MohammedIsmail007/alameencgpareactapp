@@ -17,7 +17,7 @@ import MainHome from "./frontend/MainHome";
 import Civilr2020home from "./frontend/r2020/civilr2020/Civilr2020home";
 import AdminManage from "./frontend/interface/AdminManage";
 import FacultyManage from "./frontend/interface/FacultyManage";
-
+import Sem1sandhr23 from "./frontend/r2023/sandhr2023/sem1sandhr23";
 function App() {
   return (
     <>
@@ -36,6 +36,7 @@ function App() {
           {/* regulation 2023 */}
           <Route path="/regulations2020" element={<Homereg />}></Route>
           <Route path="/regulations2023" element={<Homereg2023 />}></Route>
+          <Route path="/sem1sandhr2023" element={<Sem1sandhr23 />}></Route>
           {/* LOGIN */}
           <Route path="/adminlogin" element={<AdminLogin />}></Route>
           <Route path="/facultyLogin" element={<FacultyLogin />}></Route>

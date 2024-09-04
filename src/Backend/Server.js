@@ -2419,6 +2419,21 @@ app.get('/students', (req, res) => {
     })
 })
 
+// DELETE route to drop a table by its name
+app.delete('/api/deleteTable/admin/:table', (req, res) => {
+    const { table } = req.params;
+    const query = `DROP TABLE IF EXISTS ??`;
+
+    db.query(query, [table], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error deleting table');
+        } else {
+            res.status(200).send(`Table ${table} deleted successfully`);
+        }
+    });
+});
+
 
 
 app.get('/', (req, res) => {
@@ -2457,7 +2472,7 @@ app.put('/api/update', (req, res) => {
 });
 
 // API route to fetch table names based on user authorization
-app.get('/api/tables', (req, res) => {
+app.get('/api/sandh/tables', (req, res) => {
     const allowedTables = ['sem1r2023']; // Example list of tables the user is allowed to see
 
     db.query("SHOW TABLES", (err, results) => {
@@ -2472,14 +2487,23 @@ app.get('/api/tables', (req, res) => {
         res.json(tables);
     });
 });
-app.get("/api/tables", (req, res) => {
-    const sql = "SHOW TABLES";
-    db.query(sql, (err, result) => {
-        if (err) return res.status(500).send(err);
-        const tables = result.map((row) => Object.values(row)[0]);
+
+app.get('/api/cse/tables', (req, res) => {
+    const allowedTables = ['sem1r2023']; // Example list of tables the user is allowed to see
+
+    db.query("SHOW TABLES", (err, results) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        // Filter tables based on allowedTables array
+        const tables = results.map(row => Object.values(row)[0])
+            .filter(table => allowedTables.includes(table));
+
         res.json(tables);
     });
 });
+
 
 // Endpoint to get fields of a selected table
 
@@ -2498,13 +2522,20 @@ app.get("/api/tableData", (req, res) => {
 
 
 app.get('/api/admin/tables', (req, res) => {
-    const sql = "SHOW TABLES";
-    db.query(sql, (err, results) => {
+    const allowedTables = ['sem1r2023', 'sem1', 'sem2', 'csesem3', 'csesem4', 'csesem5', 'csesem6', 'csesem7', 'csesem8', 'students', 'itsem3', 'itsem4',
+        'itsem5', 'itsem6', 'itsem7', 'itsem8', 'ecesem3', 'ecesem4', 'ecesem5', 'ecesem6', 'ecesem7', 'ecesem8', 'eeesem3', 'eeesem4', 'eeesem5', 'eeesem6', 'eeesem7', 'eeesem8',
+        'mechsem3', 'mechsem4', 'mechsem5', 'mechsem6', 'mechsem7', 'mechsem8', 'civilsem3', 'civilsem4', 'civilsem5', 'civilsem6', 'civilsem7', 'civilsem8', ' aidssem3', ' aidssem4', ' aidssem5', ' aidssem6', ' aidssem7', ' aidssem8']; // Example list of tables the user is allowed to see
+
+    db.query("SHOW TABLES", (err, results) => {
         if (err) {
             return res.status(500).send(err);
         }
-        const tables = results.map(row => Object.values(row)[0]);
-        res.send(tables);
+
+        // Filter tables based on allowedTables array
+        const tables = results.map(row => Object.values(row)[0])
+            .filter(table => allowedTables.includes(table));
+
+        res.json(tables);
     });
 });
 // API route to fetch data from a specific table
@@ -2555,5 +2586,539 @@ app.put("/api/update", (req, res) => {
             return res.status(500).send(err);
         }
         res.json(result);
+    });
+});
+app.delete('/api/deleteRow/:table/:id', (req, res) => {
+    const { table, id } = req.params;
+    const query = `DELETE FROM ?? WHERE id = ?`;
+    db.query(query, [table, id], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error deleting the row');
+        } else {
+            res.status(200).send('Row deleted successfully');
+        }
+    });
+});
+
+app.get('/sem1r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/sem2r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/csesem3r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/csesem4r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/csesem5r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/csesem6r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/csesem7r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/csesem8r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/itsem3r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/itsem4r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/itsem5r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/itsem6r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/itsem7r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/itsem8r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/ecesem3r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/ecesem4r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/ecesem5r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/ecesem6r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/ecesem7r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/ecesem8r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/eeesem3r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/eeesem4r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/eeesem5r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/eeesem6r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/eeesem7r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/eeesem8r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/mechsem3r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/mechsem4r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+app.get('/mechsem5r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/mechsem6r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/mechsem7r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/mechsem8r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/aidssem3r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/aidssem4r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/aidssem5r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/aidssem6r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/aidssem7r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('/aidssem8r2023', (req, res) => {
+    const query = 'SELECT course_title, course_cred FROM sem1r2023';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching courses:', err);
+            res.status(500).send('Error fetching courses');
+        } else {
+            res.json(results);
+        }
+    });
+});
+// Delete a specific row (field) from the selected table
+app.delete("/api/deleteField", (req, res) => {
+    const { table, id } = req.body;
+
+    if (!table || !id) {
+        res.status(400).send("Invalid request data.");
+        return;
+    }
+
+    const query = `DELETE FROM ?? WHERE id = ?`;
+    db.query(query, [table, id], (err, result) => {
+        if (err) {
+            console.error("Error deleting field:", err);
+            res.status(500).send("Error deleting field.");
+            return;
+        }
+        res.send("Field deleted successfully!");
     });
 });
