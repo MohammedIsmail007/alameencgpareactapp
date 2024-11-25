@@ -114,7 +114,7 @@ app.post('/sem1', (req, res) => {
             const sql = 'INSERT INTO sem1 (regno, totsum, totcredit, prevcredit, gpa, cgpa) VALUES($1, $2, $3, $4, $5, $6)';
             const values = [req.body.regno, req.body.totsum, req.body.totcredit, req.body.prevcredit, req.body.gpa, req.body.cgpa];
             console.log("Values: ", values)
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                     res.send("ERROR: " + err)
@@ -156,7 +156,7 @@ app.post('/sem2', (req, res) => {
             req.body.prevcredit,
             req.body.gpa2,
             req.body.cgpa2];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -223,7 +223,7 @@ app.post('/csesem3', (req, res) => {
             req.body.cseprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -275,7 +275,7 @@ app.post('/csesem4', (req, res) => {
             req.body.cseprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -329,7 +329,7 @@ app.post('/csesem5', (req, res) => {
             req.body.cseprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -382,7 +382,7 @@ app.post('/csesem6', (req, res) => {
             req.body.cseprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -435,7 +435,7 @@ app.post('/csesem7', (req, res) => {
             req.body.cseprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -487,7 +487,7 @@ app.post('/csesem8', (req, res) => {
             req.body.cseprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -543,7 +543,7 @@ app.post('/itsem3', (req, res) => {
             req.body.itprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -595,7 +595,7 @@ app.post('/itsem4', (req, res) => {
             req.body.itprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -649,7 +649,7 @@ app.post('/itsem5', (req, res) => {
             req.body.itprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -702,7 +702,7 @@ app.post('/itsem6', (req, res) => {
             req.body.itprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -755,7 +755,7 @@ app.post('/itsem7', (req, res) => {
             req.body.itprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -807,7 +807,7 @@ app.post('/itsem8', (req, res) => {
             req.body.itprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -863,7 +863,7 @@ app.post('/ecesem3', (req, res) => {
             req.body.eceprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -915,7 +915,7 @@ app.post('/ecesem4', (req, res) => {
             req.body.eceprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -969,7 +969,7 @@ app.post('/ecesem5', (req, res) => {
             req.body.eceprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1022,7 +1022,7 @@ app.post('/ecesem6', (req, res) => {
             req.body.eceprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1074,7 +1074,7 @@ app.post('/ecesem7', (req, res) => {
             req.body.eceprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1126,7 +1126,7 @@ app.post('/ecesem8', (req, res) => {
             req.body.eceprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1181,7 +1181,7 @@ app.post('/eeesem3', (req, res) => {
             req.body.eeeprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1233,7 +1233,7 @@ app.post('/eeesem4', (req, res) => {
             req.body.eeeprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1287,7 +1287,7 @@ app.post('/eeesem5', (req, res) => {
             req.body.eeeprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1340,7 +1340,7 @@ app.post('/eeesem6', (req, res) => {
             req.body.eeeprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1392,7 +1392,7 @@ app.post('/eeesem7', (req, res) => {
             req.body.eeeprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1444,7 +1444,7 @@ app.post('/eeesem8', (req, res) => {
             req.body.eeeprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1500,7 +1500,7 @@ app.post('/aidssem3', (req, res) => {
             req.body.aidsprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1552,7 +1552,7 @@ app.post('/aidssem4', (req, res) => {
             req.body.aidsprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1606,7 +1606,7 @@ app.post('/aidssem5', (req, res) => {
             req.body.aidsprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1659,7 +1659,7 @@ app.post('/aidssem6', (req, res) => {
             req.body.aidsprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1711,7 +1711,7 @@ app.post('/aidssem7', (req, res) => {
             req.body.aidsprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1763,7 +1763,7 @@ app.post('/aidssem8', (req, res) => {
             req.body.aidsprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1789,7 +1789,7 @@ app.post('/mechsem3', (req, res) => {
             req.body.mechprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1841,7 +1841,7 @@ app.post('/mechsem4', (req, res) => {
             req.body.mechprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1895,7 +1895,7 @@ app.post('/mechsem5', (req, res) => {
             req.body.mechprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1948,7 +1948,7 @@ app.post('/mechsem6', (req, res) => {
             req.body.mechprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2000,7 +2000,7 @@ app.post('/mechsem7', (req, res) => {
             req.body.mechprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2052,7 +2052,7 @@ app.post('/mechsem8', (req, res) => {
             req.body.itprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2107,7 +2107,7 @@ app.post('/civilsem3', (req, res) => {
             req.body.civilprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2159,7 +2159,7 @@ app.post('/civilsem4', (req, res) => {
             req.body.civilprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2213,7 +2213,7 @@ app.post('/civilsem5', (req, res) => {
             req.body.civilprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2266,7 +2266,7 @@ app.post('/civilsem6', (req, res) => {
             req.body.civilprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2318,7 +2318,7 @@ app.post('/civilsem7', (req, res) => {
             req.body.civilprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2370,7 +2370,7 @@ app.post('/civilsem8', (req, res) => {
             req.body.civilprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, values, (err, result) => {
+            db.query(sql, [values], (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
