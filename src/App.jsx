@@ -21,7 +21,11 @@ import Sem1sandhr23 from "./frontend/r2023/sandhr2023/sem1sandhr23";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+        }}
+      >
         <Routes>
           <Route path="/" element={<MainHome />}></Route>
 

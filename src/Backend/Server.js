@@ -1,33 +1,44 @@
-const dotenv = require("dotenv");
-const express = require('express');
-const mysqli = require('mysql');
-const cors = require('cors');
-const axios = require('axios');
+import dotenv from 'dotenv';
+dotenv.config({ path: './src/Backend/.env' });
+
+import express, { json } from 'express';
+import cors from 'cors';
+import fs from 'fs';
+import pkg from 'pg'
 const app = express();
-
+const { Pool } = pkg;
 app.use(cors());
-app.use(express.json());
-dotenv.config();
+app.use(json());
 
 
 
-const db = mysqli.createConnection({
+const db = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-})
-
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to database CSE:', err.stack);
-        return;
-    }
-    console.log('Connected to databaseCSE as id ' + db.threadId);
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+    ssl: {
+        ca: fs.readFileSync('src/Backend/ca.pem').toString()
+    },
 });
+
+
+db.connect(function (err) {
+    if (err)
+        throw err;
+    db.query("SELECT VERSION()", [], function (err, result) {
+        if (err)
+            throw err;
+
+        console.log(result.rows[0].version);
+    });
+});
+
+
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    const query = 'SELECT * FROM login WHERE username = ? AND password = ?';
+    const query = 'SELECT * FROM login WHERE username = $1 AND password = $2';
 
     db.query(query, [username, password], (err, results) => {
         if (err) {
@@ -43,7 +54,7 @@ app.post('/login', (req, res) => {
 
 app.post('/facultylogin', (req, res) => {
     const { username, password } = req.body;
-    const query = 'SELECT * FROM facultylogin WHERE username = ? AND password = ?';
+    const query = 'SELECT * FROM facultylogin WHERE username = $1 AND password = $2';
 
     db.query(query, [username, password], (err, results) => {
         if (err) {
@@ -69,7 +80,7 @@ app.post('/students', (req, res) => {
     const { regno, name, dpt, lateralentry } = req.body;
 
     // Check if regno exists
-    const checkQuery = 'SELECT * FROM students WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM students WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
 
@@ -78,7 +89,7 @@ app.post('/students', (req, res) => {
             res.status(409).send({ message: 'Registration number already exists' });
         } else {
             // Insert new student
-            const insertQuery = 'INSERT INTO students (regno, name, dpt, lateralentry) VALUES (?, ?, ?, ?)';
+            const insertQuery = 'INSERT INTO students (regno, name, dpt, lateralentry) VALUES ($1, $2, $3, $4)';
             db.query(insertQuery, [regno, name, dpt, lateralentry], (err, result) => {
                 if (err) throw err;
                 res.send({ message: 'Registered successfully' });
@@ -91,7 +102,7 @@ app.post('/sem1', (req, res) => {
     const { regno } = req.body;
 
     // Check if regno exists
-    const checkQuery = 'SELECT * FROM sem1 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM sem1 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
 
@@ -100,16 +111,13 @@ app.post('/sem1', (req, res) => {
             res.status(409).send({ message: 'Registration number already exists' });
         } else {
 
-            const sql = "INSERT INTO sem1 (`regno`, `totsum`, `totcredit`, `prevcredit`, `gpa`,`cgpa`) VALUES (?)";
-            const values = [req.body.regno,
-            req.body.totsum,
-            req.body.totcredit,
-            req.body.prevcredit,
-            req.body.gpa,
-            req.body.cgpa];
-            db.query(sql, [values], (err, result) => {
+            const sql = 'INSERT INTO sem1 (regno, totsum, totcredit, prevcredit, gpa, cgpa) VALUES($1, $2, $3, $4, $5, $6)';
+            const values = [req.body.regno, req.body.totsum, req.body.totcredit, req.body.prevcredit, req.body.gpa, req.body.cgpa];
+            console.log("Values: ", values)
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
+                    res.send("ERROR: " + err)
                 } else {
                     res.send("Value inserted successfully");
                 }
@@ -124,7 +132,7 @@ app.get('/sem1/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, sem1.totsum, sem1.totcredit, sem1.prevcredit, sem1.gpa, sem1.cgpa 
         FROM students s
         JOIN sem1 ON s.regno = sem1.regno
-        WHERE s.regno = ?`;
+        WHERE s.regno = $1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -137,18 +145,18 @@ app.get('/sem1/:regno', (req, res) => {
 
 app.post('/sem2', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM sem2 WHERE regno2 = ?';
+    const checkQuery = 'SELECT * FROM sem2 WHERE regno2 = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO sem2 (`regno2`, `totsum2`, `totcredit2`, `prevcredit2`, `gpa2`,`cgpa2`) VALUES (?)";
+            const sql = 'INSERT INTO sem2 (`regno2`, `totsum2`, `totcredit2`, `prevcredit2`, `gpa2`,`cgpa2`) VALUES ($1,$2,$3,$4,$5,$6)';
             const values = [req.body.regno,
             req.body.totsum2,
             req.body.totcredit2,
             req.body.prevcredit,
             req.body.gpa2,
             req.body.cgpa2];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -166,7 +174,7 @@ app.get('/sem2/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, sem2.totsum2, sem2.totcredit2, sem2.prevcredit2, sem2.gpa2, sem2.cgpa2 
         FROM students s
         JOIN sem2 ON s.regno = sem2.regno2
-        WHERE s.regno = ?`;
+        WHERE s.regno = $1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -204,18 +212,18 @@ app.get('/sem2', (req, res) => {
 // Cse department
 app.post('/csesem3', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM csesem3 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM csesem3 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO csesem3 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES (?)";
+            const sql = "INSERT INTO csesem3 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.csetotsum,
             req.body.csetotcredit,
             req.body.cseprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -244,7 +252,7 @@ app.get('/csesem3/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, csesem3.csetotsum, csesem3.csetotcredit, csesem3.cseprevcredit, csesem3.csegpa, csesem3.csecgpa 
         FROM students s
         JOIN csesem3 ON s.regno = csesem3.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -256,18 +264,18 @@ app.get('/csesem3/:regno', (req, res) => {
 
 app.post('/csesem4', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM csesem4 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM csesem4 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO csesem4 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES (?)";
+            const sql = "INSERT INTO csesem4 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.csetotsum,
             req.body.csetotcredit,
             req.body.cseprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -297,7 +305,7 @@ app.get('/csesem4/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, csesem4.csetotsum, csesem4.csetotcredit, csesem4.cseprevcredit, csesem4.csegpa, csesem4.csecgpa 
         FROM students s
         JOIN csesem4 ON s.regno = csesem4.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -310,18 +318,18 @@ app.get('/csesem4/:regno', (req, res) => {
 
 app.post('/csesem5', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM csesem5 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM csesem5 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO csesem5 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES (?)";
+            const sql = "INSERT INTO csesem5 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.csetotsum,
             req.body.csetotcredit,
             req.body.cseprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -350,7 +358,7 @@ app.get('/csesem5/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, csesem5.csetotsum, csesem5.csetotcredit, csesem5.cseprevcredit, csesem5.csegpa, csesem5.csecgpa 
         FROM students s
         JOIN csesem5 ON s.regno = csesem5.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -363,18 +371,18 @@ app.get('/csesem5/:regno', (req, res) => {
 
 app.post('/csesem6', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM csesem6 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM csesem6 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO csesem6 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES (?)";
+            const sql = "INSERT INTO csesem6 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES ($1, $2, $3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.csetotsum,
             req.body.csetotcredit,
             req.body.cseprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -403,7 +411,7 @@ app.get('/csesem6/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, csesem6.csetotsum, csesem6.csetotcredit, csesem6.cseprevcredit, csesem6.csegpa, csesem6.csecgpa 
         FROM students s
         JOIN csesem6 ON s.regno = csesem6.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -416,18 +424,18 @@ app.get('/csesem6/:regno', (req, res) => {
 
 app.post('/csesem7', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM csesem7 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM csesem7 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO csesem7 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES (?)";
+            const sql = "INSERT INTO csesem7 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredit`, `csegpa`,`csecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.csetotsum,
             req.body.csetotcredit,
             req.body.cseprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -456,7 +464,7 @@ app.get('/csesem7/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, csesem7.csetotsum, csesem7.csetotcredit, csesem7.cseprevcredit, csesem7.csegpa, csesem7.vsecgpa 
         FROM students s
         JOIN csesem7 ON s.regno = csesem7.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -468,18 +476,18 @@ app.get('/csesem7/:regno', (req, res) => {
 
 app.post('/csesem8', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM csesem8 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM csesem8 WHERE regno = $';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO csesem8 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredcse`, `csegpa`,`csecgpa`) VALUES (?)";
+            const sql = "INSERT INTO csesem8 (`regno`, `csetotsum`, `csetotcredit`, `cseprevcredcse`, `csegpa`,`csecgpa`) VALUES ($1, $2, $3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.csetotsum,
             req.body.csetotcredit,
             req.body.cseprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -509,7 +517,7 @@ app.get('/csesem8/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, csesem8.csetotsum, csesem8.csetotcredit, csesem8.cseprevcredit, csesem8.csegpa, csesem8.csecgpa 
         FROM students s
         JOIN csesem8 ON s.regno = csesem8.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -524,18 +532,18 @@ app.get('/csesem8/:regno', (req, res) => {
 // IT DEPARTMENT
 app.post('/itsem3', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM itsem3 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM itsem3 WHERE regno = $';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem3 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO itsem3 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES ($1,$2,$3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
             req.body.itprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -564,7 +572,7 @@ app.get('/itsem3/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, itsem3.ittotsum, itsem3.ittotcredit, itsem3.itprevcredit, itsem3.itgpa, itsem3.itcgpa 
         FROM students s
         JOIN itsem3 ON s.regno = itsem3.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -576,18 +584,18 @@ app.get('/itsem3/:regno', (req, res) => {
 
 app.post('/itsem4', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM itsem4 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM itsem4 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem4 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO itsem4 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES ($1,$2,$3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
             req.body.itprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -617,7 +625,7 @@ app.get('/itsem4/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, itsem4.ittotsum, itsem4.ittotcredit, itsem4.itprevcredit, itsem4.itgpa, itsem4.itcgpa 
         FROM students s
         JOIN itsem4 ON s.regno = itsem4.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -630,18 +638,18 @@ app.get('/itsem4/:regno', (req, res) => {
 
 app.post('/itsem5', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM itsem5 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM itsem5 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem5 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO itsem5 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES ($1,$2$3,$3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
             req.body.itprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -670,7 +678,7 @@ app.get('/itsem5/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, itsem5.ittotsum, itsem5.ittotcredit, itsem5.itprevcredit, itsem5.itgpa, itsem5.itcgpa 
         FROM students s
         JOIN itsem5 ON s.regno = itsem5.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -683,18 +691,18 @@ app.get('/itsem5/:regno', (req, res) => {
 
 app.post('/itsem6', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM itsem6 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM itsem6 WHERE regno = $';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem6 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO itsem6 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES ($1,$2,$3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
             req.body.itprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -723,7 +731,7 @@ app.get('/itsem6/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, itsem6.ittotsum, itsem6.ittotcredit, itsem6.itprevcredit, itsem6.itgpa, itsem6.itcgpa 
         FROM students s
         JOIN itsem6 ON s.regno = itsem6.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -736,18 +744,18 @@ app.get('/itsem6/:regno', (req, res) => {
 
 app.post('/itsem7', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM itsem7 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM itsem7 WHERE regno = $';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem7 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO itsem7 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES ($1,$2,$3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
             req.body.itprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -776,7 +784,7 @@ app.get('/itsem7/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, itsem7.ittotsum, itsem7.ittotcredit, itsem7.itprevcredit, itsem7.itgpa, itsem7.itcgpa 
         FROM students s
         JOIN itsem7 ON s.regno = itsem7.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -788,18 +796,18 @@ app.get('/itsem7/:regno', (req, res) => {
 
 app.post('/itsem8', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM itsem8 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM itsem8 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO itsem8 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES (?)";
+            const sql = "INSERT INTO itsem8 (`regno`, `ittotsum`, `ittotcredit`, `itprevcredit`, `itgpa`,`itcgpa`) VALUES ($1,$2,$3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
             req.body.itprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -829,7 +837,7 @@ app.get('/itsem8/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, itsem8.ittotsum, itsem8.ittotcredit, itsem8.itprevcredit, itsem8.itgpa, itsem8.itcgpa 
         FROM students s
         JOIN itsem8 ON s.regno = itsem8.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -844,18 +852,18 @@ app.get('/itsem8/:regno', (req, res) => {
 
 app.post('/ecesem3', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM ecesem3 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM ecesem3 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO ecesem3 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES (?)";
+            const sql = "INSERT INTO ecesem3 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.ecetotsum,
             req.body.ecetotcredit,
             req.body.eceprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -884,7 +892,7 @@ app.get('/ecesem3/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, ecesem3.ecetotsum, ecesem3.ecetotcredit, ecesem3.eceprevcredit, ecesem3.ecegpa, ecesem3.ececgpa 
         FROM students s
         JOIN ecesem3 ON s.regno = ecesem3.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -896,18 +904,18 @@ app.get('/ecesem3/:regno', (req, res) => {
 
 app.post('/ecesem4', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM ecesem4 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM ecesem4 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO ecesem4 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES (?)";
+            const sql = "INSERT INTO ecesem4 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.ecetotsum,
             req.body.ecetotcredit,
             req.body.eceprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -937,7 +945,7 @@ app.get('/ecesem4/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, ecesem4.ecetotsum, ecesem4.ecetotcredit, ecesem4.eceprevcredit, ecesem4.ecegpa, ecesem4.ececgpa 
         FROM students s
         JOIN ecesem4 ON s.regno = ecesem4.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -950,18 +958,18 @@ app.get('/ecesem4/:regno', (req, res) => {
 
 app.post('/ecesem5', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM ecesem5 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM ecesem5 WHERE regno = $';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO ecesem5 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES (?)";
+            const sql = "INSERT INTO ecesem5 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.ecetotsum,
             req.body.ecetotcredit,
             req.body.eceprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -990,7 +998,7 @@ app.get('/ecesem5/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, ecesem5.ecetotsum, ecesem5.ecetotcredit, ecesem5.eceprevcredit, ecesem5.ecegpa, ecesem5.ececgpa 
         FROM students s
         JOIN ecesem5 ON s.regno = ecesem5.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1003,18 +1011,18 @@ app.get('/ecesem5/:regno', (req, res) => {
 
 app.post('/ecesem6', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM ecesem6 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM ecesem6 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO ecesem6 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES (?)";
+            const sql = "INSERT INTO ecesem6 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.ecetotsum,
             req.body.ecetotcredit,
             req.body.eceprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1043,7 +1051,7 @@ app.get('/ecesem6/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, ecesem6.ecetotsum, ecesem6.ecetotcredit, ecesem6.eceprevcredit, ecesem6.ecegpa, ecesem6.ececgpa 
         FROM students s
         JOIN ecesem6 ON s.regno = ecesem6.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1055,18 +1063,18 @@ app.get('/ecesem6/:regno', (req, res) => {
 
 app.post('/ecesem7', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM ecesem7 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM ecesem7 WHERE regno = $';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO ecesem7 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`, ececgpa`) VALUES (?)";
+            const sql = "INSERT INTO ecesem7 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`, ececgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.ecetotsum,
             req.body.ecetotcredit,
             req.body.eceprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1095,7 +1103,7 @@ app.get('/ecesem7/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, ecesem7.ecetotsum, ecesem7.ecetotcredit, ecesem7.eceprevcredit, ecesem7.ecegpa, ecesem7.ececgpa 
         FROM students s
         JOIN ecesem7 ON s.regno = ecesem7.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1107,18 +1115,18 @@ app.get('/ecesem7/:regno', (req, res) => {
 
 app.post('/ecesem8', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM ecesem8 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM ecesem8 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO ecesem8 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES (?)";
+            const sql = "INSERT INTO ecesem8 (`regno`, `ecetotsum`, `ecetotcredit`, `eceprevcredit`, `ecegpa`,`ececgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.ecetotsum,
             req.body.ecetotcredit,
             req.body.eceprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1148,7 +1156,7 @@ app.get('/ecesem8/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, ecesem8.ecetotsum, ecesem8.ecetotcredit, ecesem8.eceprevcredit, ecesem8.ecegpa, ecesem8.ececgpa 
         FROM students s
         JOIN ecesem8 ON s.regno = ecesem8.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1162,18 +1170,18 @@ app.get('/ecesem8/:regno', (req, res) => {
 
 app.post('/eeesem3', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM eeesem3 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM eeesem3 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO eeesem3 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES (?)";
+            const sql = "INSERT INTO eeesem3 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.eeetotsum,
             req.body.eeetotcredit,
             req.body.eeeprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1202,7 +1210,7 @@ app.get('/eeesem3/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, eeesem3.eeetotsum, eeesem3.eeetotcredit, eeesem3.eeeprevcredit, eeesem3.eeegpa, eeesem3.eeecgpa 
         FROM students s
         JOIN eeesem3 ON s.regno = eeesem3.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1214,18 +1222,18 @@ app.get('/eeesem3/:regno', (req, res) => {
 
 app.post('/eeesem4', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM eeesem4 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM eeesem4 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO eeesem4 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES (?)";
+            const sql = "INSERT INTO eeesem4 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.eeetotsum,
             req.body.eeetotcredit,
             req.body.eeeprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1255,7 +1263,7 @@ app.get('/eeesem4/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, eeesem4.eeetotsum, eeesem4.eeetotcredit, eeesem4.eeeprevcredit, eeesem4.eeegpa, eeesem4.eeecgpa 
         FROM students s
         JOIN eeesem4 ON s.regno = eeesem4.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1268,18 +1276,18 @@ app.get('/eeesem4/:regno', (req, res) => {
 
 app.post('/eeesem5', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM eeesem5 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM eeesem5 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO eeesem5 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES (?)";
+            const sql = "INSERT INTO eeesem5 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.eeetotsum,
             req.body.eeetotcredit,
             req.body.eeeprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1308,7 +1316,7 @@ app.get('/eeesem5/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, eeesem5.eeetotsum, eeesem5.eeetotcredit, eeesem5.eeeprevcredit, eeesem5.eeegpa, eeesem5.eeecgpa 
         FROM students s
         JOIN eeesem5 ON s.regno = eeesem5.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1321,18 +1329,18 @@ app.get('/eeesem5/:regno', (req, res) => {
 
 app.post('/eeesem6', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM eeesem6 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM eeesem6 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO eeesem6 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES (?)";
+            const sql = "INSERT INTO eeesem6 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.eeetotsum,
             req.body.eeetotcredit,
             req.body.eeeprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1361,7 +1369,7 @@ app.get('/eeesem6/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, eeesem6.eeetotsum, eeesem6.eeetotcredit, eeesem6.eeeprevcredit, eeesem6.eeegpa, eeesem6.eeecgpa 
         FROM students s
         JOIN eeesem6 ON s.regno = eeesem6.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1373,18 +1381,18 @@ app.get('/eeesem6/:regno', (req, res) => {
 
 app.post('/eeesem7', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM eeesem7 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM eeesem7 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO eeesem7 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES (?)";
+            const sql = "INSERT INTO eeesem7 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES ($1,$2,$3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.eeetotsum,
             req.body.eeetotcredit,
             req.body.eeeprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1413,7 +1421,7 @@ app.get('/eeesem7/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, eeesem7.eeetotsum, eeesem7.eeetotcredit, eeesem7.eeeprevcredit, eeesem7.eeegpa, eeesem7.eeecgpa 
         FROM students s
         JOIN eeesem7 ON s.regno = eeesem7.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1425,18 +1433,18 @@ app.get('/eeesem7/:regno', (req, res) => {
 
 app.post('/eeesem8', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM eeesem8 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM eeesem8 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO eeesem8 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES (?)";
+            const sql = "INSERT INTO eeesem8 (`regno`, `eeetotsum`, `eeetotcredit`, `eeeprevcredit`, `eeegpa`,`eeecgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.eeetotsum,
             req.body.eeetotcredit,
             req.body.eeeprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1466,7 +1474,7 @@ app.get('/eeesem8/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, eeesem8.eeetotsum, eeesem8.eeetotcredit, eeesem8.eeeprevcredit, eeesem8.eeegpa, eeesem8.eeecgpa 
         FROM students s
         JOIN eeesem8 ON s.regno = eeesem8.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1481,18 +1489,18 @@ app.get('/eeesem8/:regno', (req, res) => {
 
 app.post('/aidssem3', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM aidssem3 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM aidssem3 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO aidssem3 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES (?)";
+            const sql = "INSERT INTO aidssem3 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.aidstotsum,
             req.body.aidstotcredit,
             req.body.aidsprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1521,7 +1529,7 @@ app.get('/aidssem3/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, aidssem3.aidstotsum, aidssem3.aidstotcredit, aidssem3.aidsprevcredit, aidssem3.aidsgpa, aidssem3.aidscgpa 
         FROM students s
         JOIN aidssem3 ON s.regno = aidssem3.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1533,18 +1541,18 @@ app.get('/aidssem3/:regno', (req, res) => {
 
 app.post('/aidssem4', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM aidssem4 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM aidssem4 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO aidssem4 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES (?)";
+            const sql = "INSERT INTO aidssem4 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES ($1, $2, $3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.aidstotsum,
             req.body.aidstotcredit,
             req.body.aidsprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1574,7 +1582,7 @@ app.get('/aidssem4/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, aidssem4.aidstotsum, aidssem4.aidstotcredit, aidssem4.aidsprevcredit, aidssem4.aidsgpa, aidssem4.aidscgpa 
         FROM students s
         JOIN aidssem4 ON s.regno = aidssem4.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1587,18 +1595,18 @@ app.get('/aidssem4/:regno', (req, res) => {
 
 app.post('/aidssem5', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM aidssem5 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM aidssem5 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO aidssem5 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES (?)";
+            const sql = "INSERT INTO aidssem5 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES ($1,$2,$3,$4,$5,$6)";
             const values = [req.body.regno,
             req.body.aidstotsum,
             req.body.aidstotcredit,
             req.body.aidsprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1627,7 +1635,7 @@ app.get('/aidssem5/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, aidssem5.aidstotsum, aidssem5.aidstotcredit, aidssem5.aidsprevcredit, aidssem5.aidsgpa, aidssem5.aidscgpa 
         FROM students s
         JOIN aidssem5 ON s.regno = aidssem5.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1640,18 +1648,18 @@ app.get('/aidssem5/:regno', (req, res) => {
 
 app.post('/aidssem6', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM aidssem6 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM aidssem6 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO aidssem6 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES (?)";
+            const sql = "INSERT INTO aidssem6 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.aidstotsum,
             req.body.aidstotcredit,
             req.body.aidsprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1680,7 +1688,7 @@ app.get('/aidssem6/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, aidssem6.aidstotsum, aidssem6.aidstotcredit, aidssem6.aidsprevcredit, aidssem6.aidsgpa, aidssem6.aidscgpa 
         FROM students s
         JOIN aidssem6 ON s.regno = aidssem6.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1692,18 +1700,18 @@ app.get('/aidssem6/:regno', (req, res) => {
 
 app.post('/aidssem7', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM aidssem7 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM aidssem7 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO aidssem7 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES (?)";
+            const sql = "INSERT INTO aidssem7 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.aidstotsum,
             req.body.aidstotcredit,
             req.body.aidsprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1732,7 +1740,7 @@ app.get('/aidssem7/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, aidssem7.aidstotsum, aidssem7.aidstotcredit, aidssem7.aidsprevcredit, aidssem7.aidsgpa, aidssem7.aidscgpa 
         FROM students s
         JOIN aidssem7 ON s.regno = aidssem7.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1744,18 +1752,18 @@ app.get('/aidssem7/:regno', (req, res) => {
 
 app.post('/aidssem8', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM aidssem8 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM aidssem8 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO aidssem8 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES (?)";
+            const sql = "INSERT INTO aidssem8 (`regno`, `aidstotsum`, `aidstotcredit`, `aidsprevcredit`, `aidsgpa`,`aidscgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.aidstotsum,
             req.body.aidstotcredit,
             req.body.aidsprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1770,18 +1778,18 @@ app.post('/aidssem8', (req, res) => {
 //Mechanical department
 app.post('/mechsem3', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM mechsem3 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM mechsem3 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO mechsem3 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES (?)";
+            const sql = "INSERT INTO mechsem3 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.mechtotsum,
             req.body.mechtotcredit,
             req.body.mechprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1810,7 +1818,7 @@ app.get('/mechsem3/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, mechsem3.mechtotsum, mechsem3.mechtotcredit, mechsem3.mechprevcredit, mechsem3.mechgpa, mechsem3.mechcgpa 
         FROM students s
         JOIN mechsem3 ON s.regno = mechsem3.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1822,18 +1830,18 @@ app.get('/mechsem3/:regno', (req, res) => {
 
 app.post('/mechsem4', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM mechsem4 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM mechsem4 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO mechsem4 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES (?)";
+            const sql = "INSERT INTO mechsem4 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.mechtotsum,
             req.body.mechtotcredit,
             req.body.mechprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1863,7 +1871,7 @@ app.get('/mechsem4/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, mechsem4.mechtotsum, mechsem4.mechtotcredit, mechsem4.mechprevcredit, mechsem4.mechgpa, mechsem4.mechcgpa 
         FROM students s
         JOIN mechsem4 ON s.regno = mechsem4.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1876,18 +1884,18 @@ app.get('/mechsem4/:regno', (req, res) => {
 
 app.post('/mechsem5', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM mechsem5 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM mechsem5 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO mechsem5 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES (?)";
+            const sql = "INSERT INTO mechsem5 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.mechtotsum,
             req.body.mechtotcredit,
             req.body.mechprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1916,7 +1924,7 @@ app.get('/mechsem5/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, mechsem5.mechtotsum, mechsem5.mechtotcredit, mechsem5.mechprevcredit, mechsem5.mechgpa, mechsem5.mechcgpa 
         FROM students s
         JOIN mechsem5 ON s.regno = mechsem5.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1929,18 +1937,18 @@ app.get('/mechsem5/:regno', (req, res) => {
 
 app.post('/mechsem6', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM mechsem6 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM mechsem6 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO mechsem6 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES (?)";
+            const sql = "INSERT INTO mechsem6 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.mechtotsum,
             req.body.mechtotcredit,
             req.body.mechprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -1969,7 +1977,7 @@ app.get('/mechsem6/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, mechsem6.mechtotsum, mechsem6.mechtotcredit, mechsem6.mechprevcredit, mechsem6.mechgpa, mechsem6.mechcgpa 
         FROM students s
         JOIN mechsem6 ON s.regno = mechsem6.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -1981,18 +1989,18 @@ app.get('/mechsem6/:regno', (req, res) => {
 
 app.post('/mechsem7', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM mechsem7 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM mechsem7 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO mechsem7 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES (?)";
+            const sql = "INSERT INTO mechsem7 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.mechtotsum,
             req.body.mechtotcredit,
             req.body.mechprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2021,7 +2029,7 @@ app.get('/mechsem7/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, mechsem7.mechtotsum, mechsem7.mechtotcredit, mechsem7.mechprevcredit, mechsem7.mechgpa, mechsem7.mechcgpa 
         FROM students s
         JOIN mechsem7 ON s.regno = mechsem7.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -2033,18 +2041,18 @@ app.get('/mechsem7/:regno', (req, res) => {
 
 app.post('/mechsem8', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM mechsem8 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM mechsem8 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO mechsem8 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES (?)";
+            const sql = "INSERT INTO mechsem8 (`regno`, `mechtotsum`, `mechtotcredit`, `mechprevcredit`, `mechgpa`,`mechcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.ittotsum,
             req.body.ittotcredit,
             req.body.itprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2074,7 +2082,7 @@ app.get('/mechsem8/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, mechsem8.ittotsum, mechsem8.ittotcredit, mechsem8.itprevcredit, mechsem8.itgpa, mechsem8.itcgpa 
         FROM students s
         JOIN mechsem8 ON s.regno = mechsem8.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -2088,18 +2096,18 @@ app.get('/mechsem8/:regno', (req, res) => {
 
 app.post('/civilsem3', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM civilsem3 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM civilsem3 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO civilsem3 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem3 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.civiltotsum,
             req.body.civiltotcredit,
             req.body.civilprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2128,7 +2136,7 @@ app.get('/civilsem3/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, civilsem3.civiltotsum, civilsem3.civiltotcredit, civilsem3.civilprevcredit, civilsem3.civilgpa, civilsem3.itcgpa 
         FROM students s
         JOIN civilsem3 ON s.regno = civilsem3.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -2140,18 +2148,18 @@ app.get('/civilsem3/:regno', (req, res) => {
 
 app.post('/civilsem4', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM civilsem4 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM civilsem4 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO civilsem4 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem4 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.civiltotsum,
             req.body.civiltotcredit,
             req.body.civilprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2181,7 +2189,7 @@ app.get('/civilsem4/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, civilsem4.civiltotsum, civilsem4.civiltotcredit, civilsem4.civilprevcredit, civilsem4.civilgpa, civilsem4.civilcgpa 
         FROM students s
         JOIN civilsem4 ON s.regno = civilsem4.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -2194,18 +2202,18 @@ app.get('/civilsem4/:regno', (req, res) => {
 
 app.post('/civilsem5', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM civilsem5 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM civilsem5 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO civilsem5 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem5 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.civiltotsum,
             req.body.civiltotcredit,
             req.body.civilprevcredit,
             req.body.gpa5,
             req.body.cgpa5];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2234,7 +2242,7 @@ app.get('/civilsem5/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, civilsem5.civiltotsum, civilsem5.civiltotcredit, civilsem5.civilprevcredit, civilsem5.civilgpa, civilsem5.civilcgpa 
         FROM students s
         JOIN civilsem5 ON s.regno = civilsem5.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -2247,18 +2255,18 @@ app.get('/civilsem5/:regno', (req, res) => {
 
 app.post('/civilsem6', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM civilsem6 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM civilsem6 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO civilsem6 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem6 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.civiltotsum,
             req.body.civiltotcredit,
             req.body.civilprevcredit,
             req.body.gpa6,
             req.body.cgpa6];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2287,7 +2295,7 @@ app.get('/civilsem6/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, civilsem6.civiltotsum, civilsem6.civiltotcredit, civilsem6.civilprevcredit, civilsem6.civilgpa, civilsem6.civilcgpa 
         FROM students s
         JOIN civilsem6 ON s.regno = civilsem6.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -2299,18 +2307,18 @@ app.get('/civilsem6/:regno', (req, res) => {
 
 app.post('/civilsem7', (req, res) => {
     const { regno } = req.body;
-    checkQuery = 'SELECT * FROM civilsem7 WHERE regno = ?';
+    checkQuery = 'SELECT * FROM civilsem7 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO civilsem7 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem7 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.civiltotsum,
             req.body.civiltotcredit,
             req.body.civilprevcredit,
             req.body.gpa3,
             req.body.cgpa3];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2339,7 +2347,7 @@ app.get('/civilsem7/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, civilsem7.civiltotsum, civilsem7.civiltotcredit, civilsem7.civilprevcredit, civilsem7.civilgpa, civilsem7.civilcgpa 
         FROM students s
         JOIN civilsem7 ON s.regno = civilsem7.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -2351,18 +2359,18 @@ app.get('/civilsem7/:regno', (req, res) => {
 
 app.post('/civilsem8', (req, res) => {
     const { regno } = req.body;
-    const checkQuery = 'SELECT * FROM civilsem8 WHERE regno = ?';
+    const checkQuery = 'SELECT * FROM civilsem8 WHERE regno = $1';
     db.query(checkQuery, [regno], (err, result) => {
         if (err) throw err;
         if (result.length > 0) { res.status(409).send({ message: 'Registration number already exists' }); } else {
-            const sql = "INSERT INTO civilsem8 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES (?)";
+            const sql = "INSERT INTO civilsem8 (`regno`, `civiltotsum`, `civiltotcredit`, `civilprevcredit`, `civilgpa`,`civilcgpa`) VALUES ($1, $2, $3, $4, $5, $6)";
             const values = [req.body.regno,
             req.body.civiltotsum,
             req.body.civiltotcredit,
             req.body.civilprevcredit,
             req.body.gpa4,
             req.body.cgpa4];
-            db.query(sql, [values], (err, result) => {
+            db.query(sql, values, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -2392,7 +2400,7 @@ app.get('/civilsem8/:regno', (req, res) => {
         SELECT s.regno, s.name, s.dpt, civilsem8.civiltotsum, civilsem8.civiltotcredit, civilsem8.civilprevcredit, civilsem8.civilgpa, civilsem8.civilcgpa 
         FROM students s
         JOIN civilsem8 ON s.regno = civilsem8.regno
-        WHERE s.regno =?`;
+        WHERE s.regno =$1`;
     db.query(sql, [regno], (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -2422,9 +2430,9 @@ app.get('/students', (req, res) => {
 // DELETE route to drop a table by its name
 app.delete('/api/deleteTable/admin/:table', (req, res) => {
     const { table } = req.params;
-    const query = `DROP TABLE IF EXISTS ??`;
+    const sql = `DROP TABLE IF EXISTS ${table}`;
 
-    db.query(query, [table], (err, result) => {
+    db.query(sql, (err, result) => {
         if (err) {
             console.error(err);
             res.status(500).send('Error deleting table');
@@ -2434,41 +2442,93 @@ app.delete('/api/deleteTable/admin/:table', (req, res) => {
     });
 });
 
+// API to fetch data from a specific table
+app.get("/api/admin/tabledata", (req, res) => {
+    const { table } = req.query;
+    if (!table) {
+        return res.status(400).send("Table name is required.");
+    }
 
-
-app.get('/', (req, res) => {
-    return res.json("Backend side")
-})
-const port = process.env.DB_PORT;
-app.listen(port, () => {
-    console.log("Server is running on port 5000")
-})
-
-// FACULTY MANAGE DATA 
-app.post('/api/insert', (req, res) => {
-    const { table, rows } = req.body;  // Accept the table name from the frontend
-    const sql = `INSERT INTO ?? (course_code, course_title, course_cred) VALUES ?`;  // Use ?? for table name
-    const values = rows.map(row => [row.course_code, row.course_title, row.course_cred]);
-
-    db.query(sql, [table, values], (err, result) => {
+    // Safely construct the query with proper escaping
+    const sql = `SELECT * FROM ${table}`;
+    db.query(sql, (err, result) => {
         if (err) {
             return res.status(500).send(err);
         }
-        res.send(result);
+        res.json(result.rows);
     });
 });
 
-// API route to update data
-app.put('/api/update', (req, res) => {
-    const { table, id, course_code, course_title, course_cred } = req.body;  // Accept the table name from the frontend
-    const sql = `UPDATE ?? SET course_code = ?, course_title = ?, course_cred = ? WHERE id = ?`;  // Use ?? for table name
+// API to insert data into a selected table
+app.post("/api/insert", (req, res) => {
+    const { table, rows } = req.body;
+    if (!table || !rows || rows.length === 0) {
+        return res.status(400).send("Table name and rows are required.");
+    }
 
-    db.query(sql, [table, course_code, course_title, course_cred, id], (err, result) => {
+    const columns = Object.keys(rows[0]);
+    const placeholders = columns.map((_, idx) => `$${idx + 1}`).join(", ");
+    const sql = `INSERT INTO ${table} (${columns.join(", ")}) VALUES (${placeholders})`;
+
+    // Prepare values for insertion
+    const values = rows.flatMap(row => columns.map(col => row[col]));
+
+    db.query(sql, values, (err, result) => {
         if (err) {
             return res.status(500).send(err);
         }
-        res.send(result);
+        res.json(result);
     });
+});
+
+// API to update data in a selected table
+app.put("/api/update", (req, res) => {
+    const { table, id, course_code, course_title, course_cred } = req.body;
+    if (!table || !id) {
+        return res.status(400).send("Table name and ID are required.");
+    }
+
+    const sql = `
+        UPDATE ${table} 
+        SET course_code = $1, course_title = $2, course_cred = $3 
+        WHERE id = $4
+    `;
+
+    db.query(sql, [course_code, course_title, course_cred, id], (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.json(result);
+    });
+});
+
+// API to delete a row from a selected table
+app.delete('/api/deleteRow/:table/:id', (req, res) => {
+    const { table, id } = req.params;
+    if (!table || !id) {
+        return res.status(400).send("Table name and ID are required.");
+    }
+
+    const sql = `DELETE FROM ${table} WHERE id = $1`;
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error deleting the row');
+        }
+        res.status(200).send('Row deleted successfully');
+    });
+});
+
+// Default route
+app.get('/', (req, res) => {
+    return res.json("Backend side");
+});
+
+// Server configuration
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
 
 // API route to fetch table names based on user authorization
@@ -2539,22 +2599,24 @@ app.get('/api/admin/tables', (req, res) => {
     });
 });
 // API route to fetch data from a specific table
+// API to fetch data from a specific table
 app.get("/api/admin/tabledata", (req, res) => {
     const { table } = req.query;
     if (!table) {
         return res.status(400).send("Table name is required.");
     }
 
-    const sql = `SELECT * FROM ??`;
-    db.query(sql, [table], (err, result) => {
+    // Safely construct the query with proper escaping
+    const sql = `SELECT * FROM ${table}`;
+    db.query(sql, (err, result) => {
         if (err) {
             return res.status(500).send(err);
         }
-        res.json(result);
+        res.json(result.rows);
     });
 });
 
-// API route to insert data into a selected table
+// API to insert data into a selected table
 app.post("/api/insert", (req, res) => {
     const { table, rows } = req.body;
     if (!table || !rows || rows.length === 0) {
@@ -2562,10 +2624,13 @@ app.post("/api/insert", (req, res) => {
     }
 
     const columns = Object.keys(rows[0]);
-    const values = rows.map((row) => columns.map((col) => row[col]));
+    const placeholders = columns.map((_, idx) => `$${idx + 1}`).join(", ");
+    const sql = `INSERT INTO ${table} (${columns.join(", ")}) VALUES (${placeholders})`;
 
-    const sql = `INSERT INTO ?? (${columns.join(", ")}) VALUES ?`;
-    db.query(sql, [table, values], (err, result) => {
+    // Prepare values for insertion
+    const values = rows.flatMap(row => columns.map(col => row[col]));
+
+    db.query(sql, values, (err, result) => {
         if (err) {
             return res.status(500).send(err);
         }
@@ -2573,33 +2638,45 @@ app.post("/api/insert", (req, res) => {
     });
 });
 
-// API route to update data in a selected table
+// API to update data in a selected table
 app.put("/api/update", (req, res) => {
     const { table, id, course_code, course_title, course_cred } = req.body;
     if (!table || !id) {
         return res.status(400).send("Table name and ID are required.");
     }
 
-    const sql = `UPDATE ?? SET course_code = ?, course_title = ?, course_cred = ? WHERE id = ?`;
-    db.query(sql, [table, course_code, course_title, course_cred, id], (err, result) => {
+    const sql = `
+        UPDATE ${table} 
+        SET course_code = $1, course_title = $2, course_cred = $3 
+        WHERE id = $4
+    `;
+
+    db.query(sql, [course_code, course_title, course_cred, id], (err, result) => {
         if (err) {
             return res.status(500).send(err);
         }
         res.json(result);
     });
 });
+
+// API to delete a row from a selected table
 app.delete('/api/deleteRow/:table/:id', (req, res) => {
     const { table, id } = req.params;
-    const query = `DELETE FROM ?? WHERE id = ?`;
-    db.query(query, [table, id], (err, result) => {
+    if (!table || !id) {
+        return res.status(400).send("Table name and ID are required.");
+    }
+
+    const sql = `DELETE FROM ${table} WHERE id = $1`;
+
+    db.query(sql, [id], (err, result) => {
         if (err) {
             console.error(err);
-            res.status(500).send('Error deleting the row');
-        } else {
-            res.status(200).send('Row deleted successfully');
+            return res.status(500).send('Error deleting the row');
         }
+        res.status(200).send('Row deleted successfully');
     });
 });
+
 
 app.get('/sem1r2023', (req, res) => {
     const query = 'SELECT course_title, course_cred FROM sem1r2023';
@@ -3112,7 +3189,7 @@ app.delete("/api/deleteField", (req, res) => {
         return;
     }
 
-    const query = `DELETE FROM ?? WHERE id = ?`;
+    const query = `DELETE FROM ${table} WHERE id = $1`;
     db.query(query, [table, id], (err, result) => {
         if (err) {
             console.error("Error deleting field:", err);
