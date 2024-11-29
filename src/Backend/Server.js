@@ -20,7 +20,7 @@ const db = new Pool({
     port: process.env.DB_PORT,
     ssl: {
         rejectUnauthorized: true,
-        ca: fs.readFileSync('src/Backend/ca.pem').toString()
+        ca: fs.readFileSync('src/Backend/ca.pem', 'utf-8').toString()
     },
 });
 
