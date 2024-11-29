@@ -15,7 +15,9 @@ const Csesem4r2020 = () => {
 
   const fetchRegnos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/csesem3"); // Update this endpoint as necessary
+      const response = await axios.get(
+        "https://alameencgpareactappserver.onrender.com/csesem3"
+      ); // Update this endpoint as necessary
       setRegnos(response.data);
     } catch (error) {
       console.error("Error fetching registration numbers:", error);
@@ -27,7 +29,7 @@ const Csesem4r2020 = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `http://localhost:5000/csesem3/${regno}`
+        `https://alameencgpareactappserver.onrender.com/csesem3/${regno}`
       );
       setStudentData(response.data);
     } catch (error) {
@@ -177,7 +179,10 @@ const Csesem4r2020 = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/csesem4", data);
+      const response = await axios.post(
+        "https://alameencgpareactappserver.onrender.com/csesem4",
+        data
+      );
 
       //console.log(response.data);
       if (response.status) {

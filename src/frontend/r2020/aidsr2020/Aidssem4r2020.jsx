@@ -15,7 +15,9 @@ const Aidssem4r2020 = () => {
 
   const fetchRegnos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/aidssem3"); // Update this endpoint as necessary
+      const response = await axios.get(
+        "https://alameencgpareactappserver.onrender.com/aidssem3"
+      ); // Update this endpoint as necessary
       setRegnos(response.data);
     } catch (error) {
       console.error("Error fetching registration numbers:", error);
@@ -27,7 +29,7 @@ const Aidssem4r2020 = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `http://localhost:5000/aidssem3/${regno}`
+        `https://alameencgpareactappserver.onrender.com/aidssem3/${regno}`
       );
       setStudentData(response.data);
     } catch (error) {
@@ -178,7 +180,10 @@ const Aidssem4r2020 = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/aidssem4", data);
+      const response = await axios.post(
+        "https://alameencgpareactappserver.onrender.com/aidssem4",
+        data
+      );
 
       //console.log(response.data);
       if (response.status) {

@@ -16,7 +16,9 @@ const sem1sandhr23 = () => {
     // Fetch course data from backend
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/sem1r2023");
+        const response = await axios.get(
+          "https://alameencgpareactappserver.onrender.com/sem1r2023"
+        );
         setCourses(response.data); // Assuming the response contains an array of courses
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -75,7 +77,10 @@ const sem1sandhr23 = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/sem1", data);
+      const response = await axios.post(
+        "https://alameencgpareactappserver.onrender.com/sem1",
+        data
+      );
 
       if (response.status) {
         alert("Data inserted successfully");

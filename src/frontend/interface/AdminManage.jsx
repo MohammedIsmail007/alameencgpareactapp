@@ -11,7 +11,7 @@ const AdminManage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/admin/tables")
+      .get("https://alameencgpareactappserver.onrender.com/api/admin/tables")
       .then((response) => {
         setTables(response.data);
       })
@@ -42,7 +42,9 @@ const AdminManage = () => {
 
     // Fetch the data of the selected table
     axios
-      .get(`http://localhost:5000/api/tableData?table=${tableName}`)
+      .get(
+        `https://alameencgpareactappserver.onrender.com/api/tableData?table=${tableName}`
+      )
       .then((response) => {
         setTableData(response.data);
       })
@@ -58,7 +60,10 @@ const AdminManage = () => {
     }
 
     axios
-      .post(`http://localhost:5000/api/insert`, { rows, table: selectedTable })
+      .post(`https://alameencgpareactappserver.onrender.com/api/insert`, {
+        rows,
+        table: selectedTable,
+      })
       .then((response) => {
         alert("Data inserted successfully!");
       })
@@ -74,13 +79,16 @@ const AdminManage = () => {
     }
 
     axios
-      .delete(`http://localhost:5000/api/deleteRow/${selectedTable}`, {
-        data: {
-          course_code: row.course_code,
-          course_title: row.course_title,
-          course_cred: row.course_cred,
-        },
-      })
+      .delete(
+        `https://alameencgpareactappserver.onrender.com/api/deleteRow/${selectedTable}`,
+        {
+          data: {
+            course_code: row.course_code,
+            course_title: row.course_title,
+            course_cred: row.course_cred,
+          },
+        }
+      )
       .then((response) => {
         alert("Row deleted successfully!");
         // Remove the deleted row from the table data
@@ -101,7 +109,9 @@ const AdminManage = () => {
   const handleDeleteRow = (id) => {
     if (window.confirm("Are you sure you want to delete this row?")) {
       axios
-        .delete(`http://localhost:5000/api/deleteRow/${selectedTable}/${id}`)
+        .delete(
+          `https://alameencgpareactappserver.onrender.com/api/deleteRow/${selectedTable}/${id}`
+        )
         .then((response) => {
           alert("Row deleted successfully!");
           // Fetch updated table data after deletion

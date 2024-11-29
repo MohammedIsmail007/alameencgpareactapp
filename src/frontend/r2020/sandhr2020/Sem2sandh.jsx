@@ -16,7 +16,9 @@ const Sem2sandh = () => {
 
   const fetchRegnos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/sem1"); // Update this endpoint as necessary
+      const response = await axios.get(
+        "https://alameencgpareactappserver.onrender.com/sem1"
+      ); // Update this endpoint as necessary
       setRegnos(response.data);
     } catch (error) {
       console.error("Error fetching registration numbers:", error);
@@ -27,7 +29,9 @@ const Sem2sandh = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:5000/sem1/${regno}`);
+      const response = await axios.get(
+        `https://alameencgpareactappserver.onrender.com/sem1/${regno}`
+      );
       setStudentData(response.data);
     } catch (error) {
       console.error("Error fetching student data:", error);
@@ -175,7 +179,10 @@ const Sem2sandh = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/sem2", data);
+      const response = await axios.post(
+        "https://alameencgpareactappserver.onrender.com/sem2",
+        data
+      );
 
       //console.log(response.data);
       if (response.status) {

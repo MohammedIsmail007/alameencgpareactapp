@@ -77,7 +77,10 @@ const Sem1sandh = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/sem1", data);
+      const response = await axios.post(
+        "https://alameencgpareactappserver.onrender.com/sem1",
+        data
+      );
 
       //console.log(response.data);
       if (response.status) {
