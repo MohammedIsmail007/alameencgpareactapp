@@ -24,7 +24,7 @@ const RegistrationFormModal = () => {
 
     try {
       const response = await axios.post(
-        "https://alameencgpareactappserver.onrender.com:5000/students",
+        "https://alameencgpareactappserver.onrender.com/students",
         data
       );
       if (response.status === 200) {
