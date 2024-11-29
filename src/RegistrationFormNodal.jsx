@@ -24,7 +24,7 @@ const RegistrationFormModal = () => {
 
     try {
       const response = await axios.post(
-        "ttps://alameencgpareactappserver.onrender.com:5000/students",
+        "https://alameencgpareactappserver.onrender.com:5000/students",
         data
       );
       if (response.status === 200) {
@@ -43,7 +43,7 @@ const RegistrationFormModal = () => {
 
   // const handleUpdate = async () => {
   //   try {
-  //     const response = await axios.put("ttps://alameencgpareactappserver.onrender.com:5000/updateCode", {
+  //     const response = await axios.put("https://alameencgpareactappserver.onrender.com:5000/updateCode", {
   //       regno,
   //       code,
   //     });
